@@ -1,0 +1,51 @@
+body{
+    background-color: #2F3D40;
+}
+
+nav{
+    background-color: #B8BEBF;
+}
+
+.container-cards{
+    margin-top: 100px;
+}
+
+.card{
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#imagenCard{
+    margin-left: 200px;
+    height: 400px;
+    width: 400px;
+}
+
+.card-title{
+    text-align: center;
+}
+
+.navbar-brand{
+    color: black;
+    margin-left: 20px;
+}
+
+.navbar-brand img{
+    width: 150px;
+    border-radius: 50%;
+}
+
+.navbar-toggler-icon{
+    color: white;
+}
+
+.container-frase{
+    margin-top: 100px;
+    margin-left: 35%;
+    
+}
+
+.container-frase h4{
+    color: #F2F2F2;
+}

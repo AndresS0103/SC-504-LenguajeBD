@@ -1,9 +1,9 @@
 body{
-    background-color: #2F3D40;
+    background-color: #232323;
 }
 
 nav{
-    background-color: #B8BEBF;
+    background-color: #EFEFEF;
 }
 
 .container-cards{
@@ -41,11 +41,41 @@ nav{
 }
 
 .container-frase{
-    margin-top: 100px;
+    margin-top: 200px;
     margin-left: 35%;
     
 }
 
 .container-frase h4{
     color: #F2F2F2;
+}
+
+#carouselExample{
+    margin-left: 37%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 500px;
+}
+
+#imagenCarrusel{
+    border-radius: 10%;
+}
+
+footer{
+    background-color: #EFEFEF;
+    margin-bottom: 0;
+    padding-bottom: 100px;
+}
+
+.infoC{
+    margin-top: 40%;
+}
+
+#facebook{
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#facebook:hover{
+    color: cadetblue;
 }

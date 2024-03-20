@@ -1,6 +1,6 @@
 <?php
-include 'conexion.php';
-include 'modelo.php';
+include '../config/Conexion.php';
+include '../models/Datos.php';
 
 
 $datos = obtenerDatos();
@@ -8,3 +8,4 @@ $datos = obtenerDatos();
 
 echo json_encode($datos);
 ?>
+

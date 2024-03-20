@@ -12,7 +12,7 @@ $(document).ready(function() {
             $.each(data, function(index, empleado) {
                 $('#cuerpo-tabla').append(`
                     <tr>
-                        <td>${empleado.EMPLOYEE_ID}</td>
+                        <td>${empleado.EMPLOYEE_ID}</td>x
                         <td>${empleado.FIRST_NAME}</td>
                         <td>${empleado.LAST_NAME}</td>
                         <td>${empleado.EMAIL}</td>

@@ -1,6 +1,6 @@
 <?php
 
-$usuario = 'HR';
+$usuario = 'hr';
 $contrasena = 'Hola123456789';
 $servidor = '//localhost:1521/orcl';
 $conexion = oci_connect($usuario, $contrasena, $servidor);

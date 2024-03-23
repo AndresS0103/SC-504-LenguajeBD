@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.19.1",
+    "oracledb": "^6.4.0"
+  }
+}

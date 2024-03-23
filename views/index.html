@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/usuarios.css">
+    <title>Lista de Usuarios</title>
+</head>
+<body>
+    <h1>Lista de Usuarios</h1>
+    <ul id="usuarios-list"></ul> 
+
+    <script>
+        fetch('/usuarios') 
+            .then(response => response.json()) 
+            .then(usuarios => {
+                const usuariosList = document.getElementById('usuarios-list'); 
+                usuarios.forEach(usuario => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${usuario[0]}: ${usuario[1]} ${usuario[2]}`;
+                    usuariosList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener los usuarios:', error);
+            });
+    </script>
+</body>
+</html>

@@ -10,12 +10,13 @@ app.get('/usuarios', async (req, res) => {
     try {
         connection = await oracledb.getConnection({
             user: "hr",
-            password: "12345",
+            password: "Hola123456789",
             connectString: "localhost/orcl"
         });
 
         const result = await connection.execute(`SELECT * FROM usuario`);
         const usuarios = result.rows; 
+        console.log(usuarios);
         res.json(usuarios); 
     } catch (error) {
         console.error('Error al obtener los usuarios:', error);

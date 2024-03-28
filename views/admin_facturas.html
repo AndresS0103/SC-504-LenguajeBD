@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Starter</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="./assets/css/usuarios.css">
+  <link rel="stylesheet" href="./assets/css/facturas.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="index.html" class="nav-link">INICIO</a>
+      </li>
+    </ul>    
+  </nav>
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">JAFRA ADMIN</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Monitoreo
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="admin.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Inventario</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="admin_usuarios.html" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Usuarios</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="admin_facturas.html" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Facturas</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Volver a la tienda
+              </p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <body class="hold-transition sidebar-mini">
+        <div class="wrapper">
+        
+          <!-- Navbar, Sidebar, Content omitted for brevity -->
+        
+          <!-- Content Wrapper. Contains page content -->
+          <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+              <div class="container-fluid">
+                <div class="row mb-2">
+                  <div class="col-sm-6">
+                    <h1>Crear Factura</h1>
+                    <!-- Formulario para crear factura con las clases personalizadas -->
+                    <div class="form-wrapper">
+                      <form id="facturaForm" action="#">
+                        <!-- Campos de factura -->
+                        <label for="id_factura">ID Factura:</label>
+                        <input type="number" id="id_factura" required><br>
+                        <label for="id_usuario">ID Usuario:</label>
+                        <input type="number" id="id_usuario" required><br>
+                        <label for="fecha_pago">Fecha de Pago:</label>
+                        <input type="date" id="fecha_pago" required><br>
+                        <label for="total_pago">Total Pago:</label>
+                        <input type="number" id="total_pago" required><br>
+                        <!-- Botón para agregar detalles de factura -->
+                        <button type="button" id="agregarDetalle">Agregar Detalle</button>
+                        <br><br>
+                        <!-- Contenedor para detalles de factura -->
+                        <div id="detalleContainer"></div>
+                        <!-- Botón para enviar factura -->
+                        <input type="submit" value="Crear Factura">
+                      </form>
+                    </div>
+                    <button onclick="mostrarFacturas()">Ver Facturas</button>
+    
+                    <h1>Lista de Facturas</h1>
+                    <ul id="facturas-list"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        
+        <!-- REQUIRED SCRIPTS -->
+        
+        <!-- jQuery -->
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- AdminLTE App -->
+        <script src="dist/js/adminlte.min.js"></script>
+        <script>
+          // Agregar función para agregar detalles de factura
+          document.getElementById('agregarDetalle').addEventListener('click', function() {
+            const detalleContainer = document.getElementById('detalleContainer');
+            // Crear campos para el detalle
+            const detalleFields = `
+              <div class="detalle">
+                <label>ID Inventario:</label>
+                <input type="number" class="detalle-input" name="id_inventario" required><br>
+                <label>Cantidad Vendida:</label>
+                <input type="number" class="detalle-input" name="cantidad_vendida" required><br>
+                <label>Número de Línea:</label>
+                <input type="number" class="detalle-input" name="n_linea" required><br>
+                <label>Total Línea:</label>
+                <input type="number" class="detalle-input" name="total_linea" required><br>
+              </div>
+            `;
+            // Agregar campos al contenedor
+            detalleContainer.insertAdjacentHTML('beforeend', detalleFields);
+          });
+        
+          // Agregar función para enviar factura
+          document.getElementById('facturaForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+        
+            const id_factura = document.getElementById('id_factura').value;
+            const id_usuario = document.getElementById('id_usuario').value;
+            const fecha_pago = document.getElementById('fecha_pago').value;
+            const total_pago = document.getElementById('total_pago').value;
+            const detalle = Array.from(document.getElementById('detalleContainer').querySelectorAll('.detalle')).map(detalleItem => {
+              return {
+                id_inventario: detalleItem.querySelector('[name="id_inventario"]').value,
+                cantidad_vendida: detalleItem.querySelector('[name="cantidad_vendida"]').value,
+                n_linea: detalleItem.querySelector('[name="n_linea"]').value,
+                total_linea: detalleItem.querySelector('[name="total_linea"]').value
+              };
+            });
+        
+            try {
+              const response = await fetch('/facturas', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  id_factura,
+                  id_usuario,
+                  fecha_pago,
+                  total_pago,
+                  detalle
+                })
+              });
+              if (response.ok) {
+                alert('Factura creada exitosamente');
+                // Limpiar el formulario después de enviar la factura
+                document.getElementById('facturaForm').reset();
+                document.getElementById('detalleContainer').innerHTML = ''; // Limpiar el contenedor de detalles
+              } else {
+                alert('Error al crear factura');
+              }
+            } catch (error) {
+              console.error('Error al enviar la factura:', error);
+              alert('Error al enviar la factura');
+            }
+          });
+        </script>
+        <script>
+            async function mostrarFacturas() {
+                try {
+                    const response = await fetch('/facturas');
+                    const facturas = await response.json();
+    
+                    const facturasList = document.getElementById('facturas-list');
+                    facturasList.innerHTML = ''; // Limpiar la lista antes de mostrar las nuevas facturas
+                    facturas.forEach(factura => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `ID Factura: ${factura.id_factura}, ID Usuario: ${factura.id_usuario}, Fecha de Pago: ${factura.fecha_pago}, Total Pago: ${factura.total_pago}`;
+                        facturasList.appendChild(listItem);
+                    });
+                } catch (error) {
+                    console.error('Error al obtener las facturas:', error);
+                }
+            }
+        </script>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+  </div>
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.min.js"></script>
+</body>
+</html>

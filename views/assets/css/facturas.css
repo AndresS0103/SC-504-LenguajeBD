@@ -1,0 +1,63 @@
+/* Estilos personalizados para el formulario de facturas */
+.form-wrapper {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-wrapper h1 {
+    margin-top: 0;
+  }
+  
+  .form-wrapper form {
+    margin-bottom: 20px;
+  }
+  
+  .form-wrapper label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-wrapper input[type="number"],
+  .form-wrapper input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .form-wrapper button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .form-wrapper button:hover {
+    background-color: #0056b3;
+  }
+  
+  .form-wrapper .detalle {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .form-wrapper .detalle label {
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .form-wrapper .detalle-input {
+    width: calc(100% - 130px);
+    margin-bottom: 5px;
+  }
+  

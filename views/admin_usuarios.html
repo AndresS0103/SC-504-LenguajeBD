@@ -99,159 +99,206 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Content Header (Page header) -->
-
-      <!--MOSTRAR USUARIOS-->
-      <div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1>Lista de Usuarios</h1>
-              <ul id="usuarios-list">
-              </ul>
-
-
-
-
-
-              <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                  <div class="container-fluid">
-                    <div class="row mb-2">
-                      <div class="col-sm-6">
-                        <h1>Crear Usuario</h1>
-                        <!-- Formulario para crear usuario -->
-                        <div class="form-wrapper">
-                          <form id="form-insertar-usuario" method="post" action="/usuariosInsertar">
-                            <!-- Campos del usuario -->
-                            <label for="id_usuario">ID Usuario:</label>
-                            <input type="number" id="id_usuario" name="id_usuario" required><br>
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" required><br>
-                            <label for="prim_apellido">Primer Apellido:</label>
-                            <input type="text" id="prim_apellido" required><br>
-                            <label for="seg_apellido">Segundo Apellido:</label>
-                            <input type="text" id="seg_apellido" required><br>
-                            <label for="cedula">Cédula:</label>
-                            <input type="number" id="cedula" required><br>
-                            <label for="rol">Rol:</label>
-                            <input type="text" id="rol" required><br>
-                            <label for="telefono_usuario">Teléfono:</label>
-                            <input type="text" id="telefono_usuario" required><br>
-                            <label for="correo">Correo:</label>
-                            <input type="email" id="correo" required><br>
-                            <!-- Botón para enviar usuario -->
-                            <input type="submit" value="Crear Usuario">
-                          </form>
-                        </div>
-                        <!-- Botón para ver facturas -->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                  // Agregar evento al formulario para insertar usuario
-                  document.getElementById('form-insertar-usuario').addEventListener('submit', async function (event) {
-                    event.preventDefault(); // Evitar el envío del formulario por defecto
-
-                    // Obtener los datos del formulario
-                    const id_usuario = document.getElementById('id_usuario').value;
-                    const nombre = document.getElementById('nombre').value;
-                    const prim_apellido = document.getElementById('prim_apellido').value;
-                    const seg_apellido = document.getElementById('seg_apellido').value;
-                    const cedula = document.getElementById('cedula').value;
-                    const rol = document.getElementById('rol').value;
-                    const telefono_usuario = document.getElementById('telefono_usuario').value;
-                    const correo = document.getElementById('correo').value;
-
-                    try {
-                      // Enviar solicitud POST para insertar usuario
-                      const response = await fetch('/usuariosInsertar', {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                          id_usuario,
-                          nombre,
-                          prim_apellido,
-                          seg_apellido,
-                          cedula,
-                          rol,
-                          telefono_usuario,
-                          correo
-                        })
-                      });
-
-                      // Verificar si la solicitud fue exitosa
-                      if (response.ok) {
-                        // Limpiar el formulario después de la inserción
-                        document.getElementById('form-insertar-usuario').reset();
-                        alert('Usuario insertado correctamente.');
-                        // Actualizar la lista de usuarios después de la inserción
-                        await actualizarListaUsuarios();
-                      } else {
-                        // Mostrar mensaje de error si la solicitud falla
-                        const errorMessage = await response.json();
-                        alert('Error al insertar usuario: ' + errorMessage.error);
-                      }
-                    } catch (error) {
-                      console.error('Error al insertar usuario:', error);
-                      alert('Error al insertar usuario.');
-                    }
-                  });
-                });
-
-                async function actualizarListaUsuarios() {
-                  try {
-                    // Obtener la lista de usuarios desde el servidor
-                    const response = await fetch('/usuarios');
-                    const usuarios = await response.json();
-                    // Limpiar la lista actual de usuarios
-                    const usuariosList = document.getElementById('usuarios-list');
-                    usuariosList.innerHTML = '';
-                    // Llenar la lista con los nuevos usuarios obtenidos
-                    usuarios.forEach(usuario => {
-                      const listItem = document.createElement('li');
-                      listItem.textContent = `${usuario[0]}: ${usuario[1]} ${usuario[2]} ${usuario[3]}`;
-                      usuariosList.appendChild(listItem);
-                    });
-                  } catch (error) {
-                    console.error('Error al obtener los usuarios:', error);
-                    alert('Error al obtener los usuarios.');
-                  }
-                }
-
-              </script>
-
-              <!--${usuario[0]}: ${usuario[1]} ${usuario[2]} ${usuario[3]}-->
-
-              <script>
-
-                fetch('/usuarios')
-                  .then(response => response.json())
-                  .then(usuarios => {
-                    const usuariosList = document.getElementById('usuarios-list');
-                    usuarios.forEach(usuario => {
-                      const listItem = document.createElement('li');
-                      listItem.textContent = `${usuario[0]}: ${usuario[1]} ${usuario[2]} ${usuario[3]}`;
-                      usuariosList.appendChild(listItem);
-                    });
-                  })
-                  .catch(error => {
-                    console.error('Error al obtener los usuarios:', error);
-                  });
-              </script>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          1 of 2
+        </div>
+        <div class="col">
+          2 of 2
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          1 of 3
+        </div>
+        <div class="col">
+          2 of 3
+        </div>
+        <div class="col">
+          3 of 3
+        </div>
       </div>
     </div>
+
+
+
+    <div class="container text-center">
+      <div class="row align-items-start">
+        <div class="col">
+          One of three columns
+        </div>
+        <div class="col">
+          <h1>Crear Usuario</h1>
+          <br>
+          <!-- Formulario para crear usuario -->
+          <div class="form-wrapper">
+            <form id="add-usuario-form" class="row g-3">
+              <div class="col-12">
+                <input type="text" class="form-control" id="id_usuario" name="id_usuario" placeholder="ID Usuario"
+                  required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="prim_apellido" name="prim_apellido"
+                  placeholder="Primer Apellido" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="seg_apellido" name="seg_apellido"
+                  placeholder="Segundo Apellido" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="text" class="form-control" id="telefono_usuario" name="telefono_usuario"
+                  placeholder="Teléfono" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" required>
+                <br>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary">Agregar
+                  Usuario</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <table id="usuario-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID Usuario</th>
+              <th>Nombre</th>
+              <th>Primer Apellido</th>
+              <th>Segundo Apellido</th>
+              <th>Cédula</th>
+              <th>Rol</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+            </tr>
+          </thead>
+          <tbody id="usuario-body"></tbody>
+        </table>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+          $(document).ready(function () {
+
+            $('#add-usuario-form').submit(function (event) {
+              event.preventDefault();
+              const id_usuario = $('#id_usuario').val();
+              const nombre = $('#nombre').val();
+              const prim_apellido = $('#prim_apellido').val();
+              const seg_apellido = $('#seg_apellido').val();
+              const cedula = $('#cedula').val();
+              const rol = $('#rol').val();
+              const telefono_usuario = $('#telefono_usuario').val();
+              const correo = $('#correo').val();
+
+              $.ajax({
+                url: '/usuariosInsertar',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                  id_usuario,
+                  nombre,
+                  prim_apellido,
+                  seg_apellido,
+                  cedula,
+                  rol,
+                  telefono_usuario,
+                  correo
+                }),
+                success: function (response) {
+                  alert(response.message);
+                  updateUsuariosTable();
+                },
+                error: function (error) {
+                  console.error('Error al agregar usuario:',
+                    error);
+                  alert(
+                    'Error al agregar usuario. Consulta la consola para más detalles.'
+                  );
+                }
+              });
+            });
+
+            function updateUsuariosTable() {
+              $.get('/usuarios', function (usuarios) {
+                const usuarioBody = $('#usuario-body');
+                usuarioBody.empty();
+
+                usuarios.forEach(usuario => {
+                  usuarioBody.append(`
+                                                                  <tr>
+                                                                      <td>${usuario[0]}</td>
+                                                                      <td>${usuario[1]}</td>
+                                                                      <td>${usuario[2]}</td>
+                                                                      <td>${usuario[3]}</td>
+                                                                      <td>${usuario[4]}</td>
+                                                                      <td>${usuario[5]}</td>
+                                                                      <td>${usuario[6]}</td>
+                                                                      <td>${usuario[7]}</td>
+                                                                  </tr>
+                                                              `);
+                });
+              });
+            }
+
+            updateUsuariosTable();
+          });
+
+        </script>
+      </div>
+      <div class="col">
+        One of three columns
+      </div>
+    </div>
+  </div>
+
+  <div class="content-wrapper mx-auto text-center">
+    <!--MOSTRAR USUARIOS-->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <div class="content-wrapper">
+              <!-- Content Header (Page header) -->
+              <div class="content-header">
+                <div class="container-fluid">
+                  <div class="row mb-2">
+                    <div class="col-sm-6">
+                      <div class="card p-3">
+
+
+                      </div><!-- /.col -->
+                    </div><!-- /.row -->
+                  </div><!-- /.container-fluid -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- REQUIRED SCRIPTS -->
 

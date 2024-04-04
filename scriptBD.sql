@@ -671,4 +671,13 @@ Begin
     END IF;
 END;
 
+CREATE OR REPLACE PROCEDURE obtener_usuarios(
+    usuarios_cursor OUT SYS_REFCURSOR
+)
+IS
+BEGIN
+    OPEN usuarios_cursor FOR
+        SELECT * FROM usuario;
+END obtener_usuarios;
+
 

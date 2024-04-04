@@ -1,9 +1,21 @@
 const express = require('express');
 const path = require('path');
+const bodyParser = require('body-parser');
+const oracledb = require('oracledb');
 const app = express();
 const { obtenerUsuarios } = require('./conexion');
+const { insertarUsuario } = require('./conexion');
+const { obtenerFacturas } = require('./conexion');
+
 
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(bodyParser.json());
+
+const dbConfig = {
+    user: 'hr',
+    password: 'Hola123456789',
+    connectString: 'localhost/orcl'
+  };
 
 //ver usuarios
 app.get('/usuarios', async (req, res) => { 
@@ -16,23 +28,43 @@ app.get('/usuarios', async (req, res) => {
     }
 });
 
-
-//crear facturas
-app.post('/facturas', async (req, res) => {
-    const { id_factura, id_usuario, fecha_pago, total_pago, detalle } = req.body;
-
+//insertar usuarios
+app.post('/usuariosInsertar', async (req, res) => {
     try {
-        // Llamar a la función para agregar factura
-        await agregarFactura(id_factura, id_usuario, fecha_pago, total_pago, detalle);
-        res.status(201).send('Factura creada exitosamente');
+        const { id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo } = req.body;
+        await insertarUsuario(id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo);
+        res.status(201).json({ message: 'Usuario insertado correctamente' });
     } catch (error) {
-        console.error('Error al crear factura:', error);
-        res.status(500).send('Error interno del servidor');
+        console.error('Error al insertar el usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor al insertar el usuario' });
     }
 });
 
+
+
+//crear facturas
+app.post('/facturas', async (req, res) => {
+    const { id_factura, id_usuario, fecha_pago, total_pago } = req.body;
+  
+    try {
+      const connection = await oracledb.getConnection(dbConfig);
+      const result = await connection.execute(
+        `INSERT INTO factura (id_factura, id_usuario, fecha_pago, total_pago) VALUES (:id_factura, :id_usuario, TO_DATE(:fecha_pago, 'YYYY-MM-DD'), :total_pago)`,
+        [id_factura, id_usuario, fecha_pago, total_pago],
+        { autoCommit: true }
+      );
+  
+      connection.close();
+      res.status(200).json({ message: 'Factura agregada exitosamente' });
+    } catch (error) {
+      console.error('Error al insertar factura:', error);
+      res.status(500).json({ error: 'Error interno al insertar factura' });
+    }
+  });
+  
+
 // ver facturas
-app.get('/facturas', async (req, res) => {
+app.get('/verFacturas', async (req, res) => {
     try {
         const facturas = await obtenerFacturas();
         res.json(facturas);

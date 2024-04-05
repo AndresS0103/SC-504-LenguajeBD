@@ -41,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="./assets/img/jafraLogo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
           style="opacity: .8">
         <span class="brand-text font-weight-light">JAFRA ADMIN</span>
       </a>
@@ -71,13 +71,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="admin_usuarios.html" class="nav-link active">
+                  <a href="admin_usuarios.html" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Usuarios</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="admin_facturas.html" class="nav-link ">
+                  <a href="admin_facturas.html" class="nav-link active">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Facturas</p>
                   </a>
@@ -118,16 +118,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <h1>Crear Factura</h1>
                     <!-- Formulario para crear factura con las clases personalizadas -->
                     <div class="form-wrapper">
-                      <form id="add-factura-form">
-                        <input type="text" id="id_factura" name="id_factura" placeholder="ID Factura" required>
-                        <input type="text" id="id_usuario" name="id_usuario" placeholder="ID Usuario" required>
-                        <input type="date" id="fecha_pago" name="fecha_pago" required>
-                        <input type="text" id="total_pago" name="total_pago" placeholder="Total Pago" required>
-                        <button type="submit">Agregar Factura</button>
+                      <form id="add-factura-form" class="mt-4">
+                        <div class="form-group">
+                          <label for="id_factura">ID Factura</label>
+                          <input type="text" class="form-control" id="id_factura" name="id_factura" placeholder="ID Factura" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="id_usuario">ID Usuario</label>
+                          <input type="text" class="form-control" id="id_usuario" name="id_usuario" placeholder="ID Usuario" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="fecha_pago">Fecha Pago</label>
+                          <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" required>
+                        </div>
+                        <div class="form-group">
+                          <label for="total_pago">Total Pago</label>
+                          <input type="text" class="form-control" id="total_pago" name="total_pago" placeholder="Total Pago" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Factura</button>
                       </form>
 
 
-                      <table id="factura-table">
+                      <table id="factura-table" class="table mt-4">
                         <thead>
                           <tr>
                             <th>ID Factura</th>
@@ -138,6 +150,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </thead>
                         <tbody id="factura-body"></tbody>
                       </table>
+
+
+                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                      
 
 
                       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

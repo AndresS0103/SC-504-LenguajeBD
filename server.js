@@ -12,8 +12,8 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
 const dbConfig = {
-    user: 'hr',
-    password: 'Hola123456789',
+    user: 'USERSERVICE',
+    password: '12345',
     connectString: 'localhost/orcl'
 };
 
@@ -30,14 +30,13 @@ app.get('/usuarios', async (req, res) => {
 
 //insertar usuarios
 app.post('/usuariosInsertar', async (req, res) => {
-    const { id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo } = req.body;
+    const { nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo } = req.body;
 
     try {
         const connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `BEGIN paquete_usuarios.INSERTAR_USUARIO(:id_usuario, :nombre, :prim_apellido, :seg_apellido, :cedula, :rol, :telefono_usuario, :correo); END;`,
+            `BEGIN paquete_usuarios.INSERTAR_USUARIO(:nombre, :prim_apellido, :seg_apellido, :cedula, :rol, :telefono_usuario, :correo); END;`,
             {
-                id_usuario: id_usuario,
                 nombre: nombre,
                 prim_apellido: prim_apellido,
                 seg_apellido: seg_apellido,

@@ -40,7 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
-        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="./assets/img/jafraLogo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
           style="opacity: .8">
         <span class="brand-text font-weight-light">JAFRA ADMIN</span>
       </a>
@@ -135,11 +135,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="form-wrapper">
             <form id="add-usuario-form" class="row g-3">
               <div class="col-12">
-                <input type="text" class="form-control" id="id_usuario" name="id_usuario" placeholder="ID Usuario"
-                  required>
-                <br>
-              </div>
-              <div class="col-12">
                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
                 <br>
               </div>
@@ -203,7 +198,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             $('#add-usuario-form').submit(function (event) {
               event.preventDefault();
-              const id_usuario = $('#id_usuario').val();
               const nombre = $('#nombre').val();
               const prim_apellido = $('#prim_apellido').val();
               const seg_apellido = $('#seg_apellido').val();
@@ -217,7 +211,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                  id_usuario,
                   nombre,
                   prim_apellido,
                   seg_apellido,

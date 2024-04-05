@@ -685,3 +685,24 @@ BEGIN
 END obtener_usuarios;
 
 
+--Nuevos cambios
+
+ALTER TABLE INVENTARIO
+ADD url_imagen VARCHAR2(100);
+
+--Secuencia autoincrement id
+--Importante: Se debe eliminar el ID del proceso de insertar en el paquete de usuarios para que funcione bien a la hora
+--de insertar un nuevo usuario por medio del crud.
+
+CREATE SEQUENCE SEQ_USUARIO_ID
+  START WITH 1
+  INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER TRG_GENERAR_SEQ_USUA_ID
+BEFORE INSERT ON USUARIO
+FOR EACH ROW
+BEGIN
+  :NEW.id_usuario := SEQ_USUARIO_ID.NEXTVAL;
+END;
+
+

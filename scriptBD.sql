@@ -253,7 +253,7 @@ PROCEDURE EDITAR_INVENTARIO(
 END paquete_inventario;
 
 --Paquete usuario
-CREATE OR REPLACE PACKAGE USERSERVICE.paquete_usuarios IS
+CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
     TYPE usuario_cursor IS REF CURSOR;
     
     PROCEDURE BUSCAR_USUARIO(
@@ -262,7 +262,6 @@ CREATE OR REPLACE PACKAGE USERSERVICE.paquete_usuarios IS
         usuarios OUT usuario_cursor
     );
     procedure INSERTAR_USUARIO(
-        id_usuario IN NUMBER,
         nombre IN VARCHAR2,
         prim_apellido IN VARCHAR2,
         seg_apellido IN VARCHAR2,
@@ -285,9 +284,8 @@ CREATE OR REPLACE PACKAGE USERSERVICE.paquete_usuarios IS
 END paquete_usuarios;
 
 
-CREATE OR REPLACE PACKAGE BODY USERSERVICE.paquete_usuarios IS
+CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     PROCEDURE INSERTAR_USUARIO(
-        id_usuario IN NUMBER,
         nombre IN VARCHAR2,
         prim_apellido IN VARCHAR2,
         seg_apellido IN VARCHAR2,
@@ -297,8 +295,7 @@ CREATE OR REPLACE PACKAGE BODY USERSERVICE.paquete_usuarios IS
         correo IN VARCHAR2
 )IS
     BEGIN
-        INSERT INTO USERSERVICE.USUARIO (
-            id_usuario,
+        INSERT INTO hr.USUARIO (
             nombre,
             prim_apellido,
             seg_apellido,
@@ -307,7 +304,6 @@ CREATE OR REPLACE PACKAGE BODY USERSERVICE.paquete_usuarios IS
             telefono_usuario,
             correo
         ) VALUES (
-            id_usuario,
             nombre,
             prim_apellido,
             seg_apellido,
@@ -346,7 +342,7 @@ CREATE OR REPLACE PACKAGE BODY USERSERVICE.paquete_usuarios IS
         correo IN VARCHAR2
     )IS
         BEGIN
-            UPDATE USERSERVICE.USUARIO SET 
+            UPDATE hr.USUARIO SET 
                 id_usuario = id_usuario,
                 nombre= nombre,
                 prim_apellido= prim_apellido,

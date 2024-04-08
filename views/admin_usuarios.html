@@ -40,7 +40,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="index3.html" class="brand-link">
-        <img src="./assets/img/jafraLogo.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
           style="opacity: .8">
         <span class="brand-text font-weight-light">JAFRA ADMIN</span>
       </a>
@@ -99,208 +99,169 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="container text-center">
-      <div class="row">
-        <div class="col">
-          1 of 2
-        </div>
-        <div class="col">
-          2 of 2
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          1 of 3
-        </div>
-        <div class="col">
-          2 of 3
-        </div>
-        <div class="col">
-          3 of 3
-        </div>
-      </div>
-    </div>
+    <div class="content-wrapper mx-auto text-center">
+      <!--MOSTRAR USUARIOS-->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                  <div class="container-fluid">
+                    <div class="row mb-2">
+                      <div class="col-sm-6">
+                        <div class="card p-3">
+                          <div class="container text-center">
+                            <form id="add-usuario-form" class="row g-3">
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre"
+                                  required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="prim_apellido" name="prim_apellido"
+                                  placeholder="Primer Apellido" required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="seg_apellido" name="seg_apellido"
+                                  placeholder="Segundo Apellido" required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula"
+                                  required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol" required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="text" class="form-control" id="telefono_usuario" name="telefono_usuario"
+                                  placeholder="Teléfono" required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo"
+                                  required>
+                                <br>
+                              </div>
+                              <div class="col-10">
+                                <button type="submit" class="btn btn-primary">Agregar
+                                  Usuario</button>
+                              </div>
+                            </form>
+                          </div>
+
+                          <table id="usuario-table" class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>ID Usuario</th>
+                                <th>Nombre</th>
+                                <th>Primer Apellido</th>
+                                <th>Segundo Apellido</th>
+                                <th>Cédula</th>
+                                <th>Rol</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
+                              </tr>
+                            </thead>
+                            <tbody id="usuario-body"></tbody>
+                          </table>
 
 
+                          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <div class="container text-center">
-      <div class="row align-items-start">
-        <div class="col">
-          One of three columns
-        </div>
-        <div class="col">
-          <h1>Crear Usuario</h1>
-          <br>
-          <!-- Formulario para crear usuario -->
-          <div class="form-wrapper">
-            <form id="add-usuario-form" class="row g-3">
-              <div class="col-12">
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control" id="prim_apellido" name="prim_apellido"
-                  placeholder="Primer Apellido" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control" id="seg_apellido" name="seg_apellido"
-                  placeholder="Segundo Apellido" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control" id="rol" name="rol" placeholder="Rol" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="text" class="form-control" id="telefono_usuario" name="telefono_usuario"
-                  placeholder="Teléfono" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" required>
-                <br>
-              </div>
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary">Agregar
-                  Usuario</button>
-              </div>
-            </form>
-          </div>
-        </div>
+                          <script>
+                            $(document).ready(function () {
 
+                              $('#add-usuario-form').submit(function (event) {
+                                event.preventDefault();
+                                const nombre = $('#nombre').val();
+                                const prim_apellido = $('#prim_apellido').val();
+                                const seg_apellido = $('#seg_apellido').val();
+                                const cedula = $('#cedula').val();
+                                const rol = $('#rol').val();
+                                const telefono_usuario = $('#telefono_usuario').val();
+                                const correo = $('#correo').val();
 
-        <table id="usuario-table" class="table table-striped">
-          <thead>
-            <tr>
-              <th>ID Usuario</th>
-              <th>Nombre</th>
-              <th>Primer Apellido</th>
-              <th>Segundo Apellido</th>
-              <th>Cédula</th>
-              <th>Rol</th>
-              <th>Teléfono</th>
-              <th>Correo</th>
-            </tr>
-          </thead>
-          <tbody id="usuario-body"></tbody>
-        </table>
+                                $.ajax({
+                                  url: '/usuariosInsertar',
+                                  method: 'POST',
+                                  contentType: 'application/json',
+                                  data: JSON.stringify({
+                                    nombre,
+                                    prim_apellido,
+                                    seg_apellido,
+                                    cedula,
+                                    rol,
+                                    telefono_usuario,
+                                    correo
+                                  }),
+                                  success: function (response) {
+                                    alert(response.message);
+                                    updateUsuariosTable();
+                                  },
+                                  error: function (error) {
+                                    console.error('Error al agregar usuario:',
+                                      error);
+                                    alert(
+                                      'Error al agregar usuario. Consulta la consola para más detalles.'
+                                    );
+                                  }
+                                });
+                              });
 
+                              function updateUsuariosTable() {
+                                $.get('/usuarios', function (usuarios) {
+                                  const usuarioBody = $('#usuario-body');
+                                  usuarioBody.empty();
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                  usuarios.forEach(usuario => {
+                                    usuarioBody.append(`
+                                                     <tr>
+                                                        <td>${usuario[0]}</td>
+                                                         <td>${usuario[1]}</td>
+                                                          <td>${usuario[2]}</td>
+                                                          <td>${usuario[3]}</td>
+                                                          <td>${usuario[4]}</td>
+                                                          <td>${usuario[5]}</td>
+                                                                                      <td>${usuario[6]}</td>
+                                                                                      <td>${usuario[7]}</td>
+                                                                                  </tr>
+                                                                              `);
+                                  });
+                                });
+                              }
 
-        <script>
-          $(document).ready(function () {
+                              updateUsuariosTable();
+                            });
 
-            $('#add-usuario-form').submit(function (event) {
-              event.preventDefault();
-              const nombre = $('#nombre').val();
-              const prim_apellido = $('#prim_apellido').val();
-              const seg_apellido = $('#seg_apellido').val();
-              const cedula = $('#cedula').val();
-              const rol = $('#rol').val();
-              const telefono_usuario = $('#telefono_usuario').val();
-              const correo = $('#correo').val();
-
-              $.ajax({
-                url: '/usuariosInsertar',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                  nombre,
-                  prim_apellido,
-                  seg_apellido,
-                  cedula,
-                  rol,
-                  telefono_usuario,
-                  correo
-                }),
-                success: function (response) {
-                  alert(response.message);
-                  updateUsuariosTable();
-                },
-                error: function (error) {
-                  console.error('Error al agregar usuario:',
-                    error);
-                  alert(
-                    'Error al agregar usuario. Consulta la consola para más detalles.'
-                  );
-                }
-              });
-            });
-
-            function updateUsuariosTable() {
-              $.get('/usuarios', function (usuarios) {
-                const usuarioBody = $('#usuario-body');
-                usuarioBody.empty();
-
-                usuarios.forEach(usuario => {
-                  usuarioBody.append(`
-                                                                  <tr>
-                                                                      <td>${usuario[0]}</td>
-                                                                      <td>${usuario[1]}</td>
-                                                                      <td>${usuario[2]}</td>
-                                                                      <td>${usuario[3]}</td>
-                                                                      <td>${usuario[4]}</td>
-                                                                      <td>${usuario[5]}</td>
-                                                                      <td>${usuario[6]}</td>
-                                                                      <td>${usuario[7]}</td>
-                                                                  </tr>
-                                                              `);
-                });
-              });
-            }
-
-            updateUsuariosTable();
-          });
-
-        </script>
-      </div>
-      <div class="col">
-        One of three columns
-      </div>
-    </div>
-  </div>
-
-  <div class="content-wrapper mx-auto text-center">
-    <!--MOSTRAR USUARIOS-->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <div class="content-wrapper">
-              <!-- Content Header (Page header) -->
-              <div class="content-header">
-                <div class="container-fluid">
-                  <div class="row mb-2">
-                    <div class="col-sm-6">
-                      <div class="card p-3">
-
-
-                      </div><!-- /.col -->
-                    </div><!-- /.row -->
-                  </div><!-- /.container-fluid -->
+                          </script>
+                        </div><!-- /.col -->
+                      </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
 
-    <!-- REQUIRED SCRIPTS -->
 
-    <!-- jQuery -->
-    <script src="plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="dist/js/adminlte.min.js"></script>
+
+      <!-- REQUIRED SCRIPTS -->
+
+      <!-- jQuery -->
+      <script src="plugins/jquery/jquery.min.js"></script>
+      <!-- Bootstrap 4 -->
+      <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <!-- AdminLTE App -->
+      <script src="dist/js/adminlte.min.js"></script>
 </body>
 
 </html>

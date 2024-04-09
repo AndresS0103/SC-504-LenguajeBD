@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const oracledb = require('oracledb');
 const app = express();
 const { obtenerUsuarios } = require('./conexion');
-const { insertarUsuario } = require('./conexion');
 const { obtenerFacturas } = require('./conexion');
 
 
@@ -12,8 +11,8 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
 const dbConfig = {
-    user: 'HR',
-    password: '12345',
+    user: 'hr',
+    password: 'Hola123456789',
     connectString: 'localhost/orcl'
 };
 
@@ -44,8 +43,7 @@ app.post('/usuariosInsertar', async (req, res) => {
                 rol: rol,
                 telefono_usuario: telefono_usuario,
                 correo: correo
-            },
-            { autoCommit: true }
+            } 
         );
 
         connection.close();

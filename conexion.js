@@ -3,8 +3,8 @@ const oracledb = require('oracledb');
 async function conectarBaseDatos() {
     try {
         const connection = await oracledb.getConnection({
-            user: "HR",
-            password: "12345",
+            user: "hr",
+            password: "Hola123456789",
             connectString: "localhost/orcl"
         });
         return connection;

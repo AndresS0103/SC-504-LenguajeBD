@@ -281,10 +281,23 @@ CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
         correo IN VARCHAR2
     );
     
+    PROCEDURE BUSCAR_USUARIO_POR_ID(
+        p_id_usuario IN hr.USUARIO.id_usuario%TYPE,
+        p_nombre OUT VARCHAR2,
+        p_prim_apellido OUT VARCHAR2,
+        p_seg_apellido OUT VARCHAR2,
+        p_cedula OUT NUMBER,
+        p_rol OUT VARCHAR2,
+        p_telefono_usuario OUT VARCHAR2,
+        p_correo OUT VARCHAR2
+    );
+    
 END paquete_usuarios;
 
 
+
 CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
+    --PROCEDIMIENTO INSERTAR USUARIO
     PROCEDURE INSERTAR_USUARIO(
         nombre IN VARCHAR2,
         prim_apellido IN VARCHAR2,
@@ -293,7 +306,7 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
         rol IN VARCHAR2,
         telefono_usuario IN VARCHAR2,
         correo IN VARCHAR2
-)IS
+    )IS
     BEGIN
         INSERT INTO hr.USUARIO (
             nombre,
@@ -312,9 +325,14 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
             telefono_usuario,
             correo
         );
-        
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al insertar el usuario: ' || SQLERRM);
     END INSERTAR_USUARIO;
 
+    --PROCEDIMIENTO BUSCAR USUARIO
     PROCEDURE BUSCAR_USUARIO(
         nombre_usuario IN VARCHAR2,
         apellido_usuario IN VARCHAR2,
@@ -330,7 +348,8 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
         
         usuarios := v_usuarios;
     END BUSCAR_USUARIO;
-
+    
+    --PROCEDIMIENTO EDITAR USUARIO
     PROCEDURE EDITAR_USUARIO(
         id_usuario IN NUMBER,
         nombre IN VARCHAR2,
@@ -341,21 +360,58 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
         telefono_usuario IN VARCHAR2,
         correo IN VARCHAR2
     )IS
-        BEGIN
-            UPDATE hr.USUARIO SET 
-                id_usuario = id_usuario,
-                nombre= nombre,
-                prim_apellido= prim_apellido,
-                seg_apellido=   seg_apellido,
-                cedula= cedula,
-                rol = rol,
-                telefono_usuario = telefono_usuario,
-                correo = correo
-                WHERE id_usuario = id_usuario;
-            
-            
-        END EDITAR_USUARIO;
+    BEGIN
+        UPDATE hr.USUARIO SET 
+            nombre= nombre,
+            prim_apellido= prim_apellido,
+            seg_apellido=  seg_apellido,
+            cedula= cedula,
+            rol = rol,
+            telefono_usuario = telefono_usuario,
+            correo = correo
+        WHERE id_usuario = id_usuario;
+    END EDITAR_USUARIO;
     
+    --PROCEDIMIENTO BUSCAR USUARIO POR ID PARA LUEGO EDITAR
+    PROCEDURE BUSCAR_USUARIO_POR_ID(
+        p_id_usuario IN hr.USUARIO.id_usuario%TYPE,
+        p_nombre OUT VARCHAR2,
+        p_prim_apellido OUT VARCHAR2,
+        p_seg_apellido OUT VARCHAR2,
+        p_cedula OUT NUMBER,
+        p_rol OUT VARCHAR2,
+        p_telefono_usuario OUT VARCHAR2,
+        p_correo OUT VARCHAR2
+    ) IS
+    BEGIN
+        SELECT
+            nombre,
+            prim_apellido,
+            seg_apellido, 
+            cedula, 
+            rol, 
+            telefono_usuario, 
+            correo
+        INTO 
+            p_nombre, 
+            p_prim_apellido, 
+            p_seg_apellido, 
+            p_cedula, p_rol, 
+            p_telefono_usuario, 
+            p_correo
+        FROM 
+            hr.USUARIO
+        WHERE 
+            id_usuario = p_id_usuario;
+
+        -- Si no se encuentra ningún usuario con el ID ingresado
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('No se encontró ningún usuario con el ID proporcionado.');
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al buscar el usuario: ' || SQLERRM);
+    END BUSCAR_USUARIO_POR_ID;
+
 END paquete_usuarios;
 
 CREATE OR REPLACE PACKAGE BODY paquetee_facturas IS

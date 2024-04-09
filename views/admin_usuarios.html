@@ -152,7 +152,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <button type="submit" class="btn btn-primary">Agregar
                                   Usuario</button>
                               </div>
+                              <div class="col-10">
+                                <button class="btn btn-outline-dark" onclick="limpiarForm()">limpiar</button>
+                              </div>
                             </form>
+                            <br>
                           </div>
 
                           <table id="usuario-table" class="table table-striped">
@@ -172,9 +176,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           </table>
 
 
+
                           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
                           <script>
+
+                            function limpiarForm() {
+                              $('#nombre').val("");
+                              $('#prim_apellido').val("");
+                              $('#seg_apellido').val("");
+                              $('#cedula').val("");
+                              $('#rol').val("");
+                              $('#telefono_usuario').val("");
+                              $('#correo').val("");
+
+                            }
+
+
                             $(document).ready(function () {
 
                               $('#add-usuario-form').submit(function (event) {
@@ -202,6 +220,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                   }),
                                   success: function (response) {
                                     alert(response.message);
+                                    limpiarForm();
                                     updateUsuariosTable();
                                   },
                                   error: function (error) {
@@ -223,23 +242,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     usuarioBody.append(`
                                                      <tr>
                                                         <td>${usuario[0]}</td>
-                                                         <td>${usuario[1]}</td>
-                                                          <td>${usuario[2]}</td>
-                                                          <td>${usuario[3]}</td>
-                                                          <td>${usuario[4]}</td>
-                                                          <td>${usuario[5]}</td>
-                                                                                      <td>${usuario[6]}</td>
-                                                                                      <td>${usuario[7]}</td>
-                                                                                  </tr>
+                                                        <td>${usuario[1]}</td>
+                                                        <td>${usuario[2]}</td>
+                                                        <td>${usuario[3]}</td>
+                                                        <td>${usuario[4]}</td>
+                                                        <td>${usuario[5]}</td>
+                                                        <td>${usuario[6]}</td>
+                                                        <td>${usuario[7]}</td>
+                                                        </tr>
                                                                               `);
                                   });
                                 });
                               }
 
+
                               updateUsuariosTable();
                             });
 
                           </script>
+
                         </div><!-- /.col -->
                       </div><!-- /.row -->
                     </div><!-- /.container-fluid -->

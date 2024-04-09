@@ -3,8 +3,8 @@ const oracledb = require('oracledb');
 async function conectarBaseDatos() {
     try {
         const connection = await oracledb.getConnection({
-            user: "hr",
-            password: "Hola123456789",
+            user: "HR",
+            password: "12345",
             connectString: "localhost/orcl"
         });
         return connection;
@@ -140,7 +140,12 @@ module.exports = {conectarBaseDatos, insertarUsuario};
         let connection;
         try {
             connection = await conectarBaseDatos();
-            const result = await connection.execute(`SELECT * FROM factura`);
+            const result = await connection.execute(`
+                SELECT f.*, df.*
+                FROM FACTURA f
+                JOIN DETALLE_FACTURA df ON f.id_factura = df.id_factura
+                ORDER BY f.id_factura ASC
+            `);
             const facturas = result.rows;
             return facturas;
         } catch (error) {

@@ -17,7 +17,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="./assets/css/usuarios.css">
   <link rel="stylesheet" href="./assets/css/facturas.css">
 </head>
 
@@ -114,113 +113,177 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="content-header">
               <div class="container-fluid">
                 <div class="row mb-2">
+                  <h3>Administracion de Facturas</h3><br>
                   <div class="col-sm-6">
-                    <h1>Crear Factura</h1>
-                    <!-- Formulario para crear factura con las clases personalizadas -->
-                    <div class="form-wrapper">
-                      <form id="add-factura-form" class="mt-4">
-                        <div class="form-group">
-                          <label for="id_factura">ID Factura</label>
-                          <input type="text" class="form-control" id="id_factura" name="id_factura" placeholder="ID Factura" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="id_usuario">ID Usuario</label>
-                          <input type="text" class="form-control" id="id_usuario" name="id_usuario" placeholder="ID Usuario" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="fecha_pago">Fecha Pago</label>
-                          <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" required>
-                        </div>
-                        <div class="form-group">
-                          <label for="total_pago">Total Pago</label>
-                          <input type="text" class="form-control" id="total_pago" name="total_pago" placeholder="Total Pago" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Agregar Factura</button>
-                      </form>
-
-
-                      <table id="factura-table" class="table mt-4">
-                        <thead>
-                          <tr>
-                            <th>ID Factura</th>
-                            <th>ID Usuario</th>
-                            <th>Fecha Pago</th>
-                            <th>Total Pago</th>
-                          </tr>
-                        </thead>
-                        <tbody id="factura-body"></tbody>
-                      </table>
-
-
-                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                      
-
-
-                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-                      <script>
-                        $(document).ready(function () {
-
-                          $('#add-factura-form').submit(function (event) {
-                            event.preventDefault();
-                            const id_factura = $('#id_factura').val();
-                            const id_usuario = $('#id_usuario').val();
-                            const fecha_pago = $('#fecha_pago').val();
-                            const total_pago = $('#total_pago').val();
-
-                            $.ajax({
-                              url: '/facturas',
-                              method: 'POST',
-                              contentType: 'application/json',
-                              data: JSON.stringify({ id_factura, id_usuario, fecha_pago, total_pago }),
-                              success: function (response) {
-                                alert(response.message);
-                                updateFacturasTable();
-                              },
-                              error: function (error) {
-                                console.error('Error al agregar factura:', error);
-                                alert('Error al agregar factura. Consulta la consola para más detalles.');
-                              }
-                            });
-                          });
-
-                          function updateFacturasTable() {
-                            $.get('/verFacturas', function (facturas) {
-                              const facturaBody = $('#factura-body');
-                              facturaBody.empty();
-
-                              facturas.forEach(factura => {
-                                facturaBody.append(`
-            <tr>
-              <td>${factura[0]}</td>
-              <td>${factura[1]}</td>
-              <td>${factura[2]}</td>
-              <td>${factura[3]}</td>
-            </tr>
-          `);
-                              });
-                            });
-                          }
-
-                          updateFacturasTable();
-                        });
-
-                      </script>
-
-                    </div><!-- /.col -->
-                  </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+                    <!-- Botones para crear factura y ver facturas -->
+                    <br><br>
+                    <button id="btn-create" class="btn btn-primary">Crear Factura</button>
+                    <br>
+                    <button id="btn-view" class="btn btn-primary">Ver Facturas</button>
+                  </div>
+                </div>
               </div>
             </div>
+            
+            <!-- Formulario para crear factura -->
+            <div id="form-wrapper" class="form-wrapper" style="display: none;">
+              <h2>Crear Factura</h2>
+              <form id="add-factura-form" class="mt-4">
+                <div class="form-group">
+                  <label for="id_usuario">ID Usuario</label>
+                  <input type="text" class="form-control" id="id_usuario" name="id_usuario" placeholder="ID Usuario" required>
+                </div>
+                <div class="form-group">
+                  <label for="fecha_pago">Fecha Pago</label>
+                  <input type="date" class="form-control" id="fecha_pago" name="fecha_pago" required>
+                </div>
+                <div class="form-group">
+                  <label for="total_pago">Total Pago</label>
+                  <input type="text" class="form-control" id="total_pago" name="total_pago" placeholder="Total Pago" required>
+                </div>
+                  <!-- Detalles de la factura -->
+                  <div class="form-group">
+                    <label for="id_inventario">ID Inventario</label>
+                    <input type="number" class="form-control" id="id_inventario" name="id_inventario" placeholder="ID Inventario" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="cantidad_vendida">Cantidad Vendida</label>
+                    <input type="number" class="form-control" id="cantidad_vendida" name="cantidad_vendida" placeholder="Cantidad Vendida" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="n_linea">Número de Línea</label>
+                    <input type="number" class="form-control" id="n_linea" name="n_linea" placeholder="Número de Línea" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="total_linea">Total de Línea</label>
+                    <input type="number" class="form-control" id="total_linea" name="total_linea" placeholder="Total de Línea" required>
+                  </div>
+                <button type="submit" class="btn btn-primary">Agregar Factura</button>
+                <br><br>
+              </form>
+              <br><br>
+            </div>
+            
+            <!-- Tabla de Facturas -->
+            <div id="table-wrapper">
+              <h2>Lista de Facturas</h2>
+              <div class="table-wrapper">
+                <table id="factura-table" class="table">
+                  
+                  <thead>
+                    <tr>
+                      <th>ID Factura</th>
+                      <th>ID Usuario</th>
+                      <th>Fecha Pago</th>
+                      <th>Total Pago</th>
+                      <th>ID Inventario</th>
+                      <th>Cantidad Vendida</th>
+                      <th>Número de Línea</th>
+                      <th>Total de Línea</th>
+                    </tr>
+                  </thead>
+                  <tbody id="factura-body">
+                    <br><br>
+                  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Scripts -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+              $(document).ready(function () {
+                $('#btn-create').click(function () {
+                  $('#form-wrapper').show();
+                  $('#table-wrapper').hide();
+                });
 
-            <!-- REQUIRED SCRIPTS -->
+                $('#btn-view').click(function () {
+                  $('#table-wrapper').show();
+                  $('#form-wrapper').hide();
+                });
 
-            <!-- jQuery -->
-            <script src="plugins/jquery/jquery.min.js"></script>
-            <!-- Bootstrap 4 -->
-            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <!-- AdminLTE App -->
-            <script src="dist/js/adminlte.min.js"></script>
-      </body>
+                $(document).ready(function () {
+            
+            $('#add-factura-form').submit(function (event) {
+              event.preventDefault();
+              
+              const id_usuario = $('#id_usuario').val();
+              const fecha_pago = $('#fecha_pago').val();
+              const total_pago = $('#total_pago').val();
+              const id_inventario = $('#id_inventario').val();
+              const cantidad_vendida = $('#cantidad_vendida').val();
+              const n_linea = $('#n_linea').val();
+              const total_linea = $('#total_linea').val();
+        
+              $.ajax({
+                url: '/facturas',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ 
+                  id_usuario, 
+                  fecha_pago, 
+                  total_pago, 
+                  id_inventario,
+                  cantidad_vendida,
+                  n_linea,
+                  total_linea
+                  
+                }),
+                success: function (response) {
+                  alert(response.message);
+                  updateFacturasTable();
+                },
+                error: function (error) {
+                  console.error('Error al agregar factura:', error);
+                  alert('Error al agregar factura. Consulta la consola para más detalles.');
+                }
+              });
+            });
+        
+            function updateFacturasTable() {
+              $.get('/verFacturas', function (facturas) {
+                const facturaBody = $('#factura-body');
+                facturaBody.empty();
+        
+                facturas.forEach(factura => {
+                  facturaBody.append(`
+                    <tr>
+                      <td>${factura[0]}</td>
+                      <td>${factura[1]}</td>
+                      <td>${factura[2]}</td>
+                      <td>${factura[3]}</td>
+                      <td>${factura[5]}</td>
+                      <td>${factura[6]}</td>
+                      <td>${factura[7]}</td>
+                      <td>${factura[8]}</td>
+
+                    </tr>
+                  `);
+                });
+              });
+            }
+        
+            updateFacturasTable();
+          });
+        
+              });
+            </script>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+  </div>
+
+  <!-- REQUIRED SCRIPTS -->
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+</body>
 
 </html>

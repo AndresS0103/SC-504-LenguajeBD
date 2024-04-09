@@ -358,6 +358,73 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     
 END paquete_usuarios;
 
+CREATE OR REPLACE PACKAGE BODY paquetee_facturas IS
+    
+    PROCEDURE insertar_factura(
+        p_id_usuario IN NUMBER,
+        p_fecha_pago IN DATE,
+        p_total_pago IN NUMBER,
+        p_id_inventario IN NUMBER,
+        p_cantidad_vendida IN NUMBER,
+        p_n_linea IN NUMBER,
+        p_total_linea IN NUMBER
+    ) IS
+        v_id_factura NUMBER;
+    BEGIN
+        
+        INSERT INTO factura (id_usuario, fecha_pago, total_pago)
+        VALUES (p_id_usuario, p_fecha_pago, p_total_pago)
+        RETURNING id_factura INTO v_id_factura;
+
+        INSERT INTO detalle_factura (id_factura, id_inventario, cantidad_vendida, n_linea, total_linea)
+        VALUES (v_id_factura, p_id_inventario, p_cantidad_vendida, p_n_linea, p_total_linea);
+        
+ 
+        COMMIT;
+    END insertar_factura;
+END paquetee_facturas;
+
+select * from factura;
+
+
+
+
+-- Paquete facturas
+
+CREATE OR REPLACE PACKAGE paquetee_facturas IS
+    TYPE factura_cursor IS REF CURSOR;
+    procedure INSERTAR_FACTURA(
+        id_usuario NUMBER,
+        fecha_pago DATE,
+        total_pago NUMBER
+    );
+
+END paquetee_facturas;
+
+
+
+
+CREATE OR REPLACE PACKAGE BODY paquetee_facturas IS
+    PROCEDURE INSERTAR_FACTURA(
+        id_usuario NUMBER,
+        fecha_pago DATE,
+        total_pago NUMBER
+)IS
+    BEGIN
+        INSERT INTO FACTURA (
+            id_usuario,
+            fecha_pago,
+            total_pago 
+        ) VALUES (
+            id_usuario,
+            fecha_pago,
+            total_pago
+        );
+        
+    END INSERTAR_FACTURA;
+    
+END paquetee_facturas;
+
 
 --Auditoria
 ALTER TABLE FINANZAS

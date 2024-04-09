@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const oracledb = require('oracledb');
 const app = express();
 const { obtenerUsuarios } = require('./conexion');
+const { insertarUsuario } = require('./conexion');
 const { obtenerFacturas } = require('./conexion');
 
 
@@ -11,8 +12,8 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
 const dbConfig = {
-    user: 'hr',
-    password: 'Hola123456789',
+    user: 'HR',
+    password: '12345',
     connectString: 'localhost/orcl'
 };
 
@@ -62,13 +63,22 @@ app.post('/usuariosInsertar', async (req, res) => {
 
 //crear facturas
 app.post('/facturas', async (req, res) => {
-    const { id_factura, id_usuario, fecha_pago, total_pago } = req.body;
+    const { id_usuario, fecha_pago, total_pago, id_inventario, cantidad_vendida, n_linea, total_linea } = req.body;
 
     try {
         const connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `INSERT INTO factura (id_factura, id_usuario, fecha_pago, total_pago) VALUES (:id_factura, :id_usuario, TO_DATE(:fecha_pago, 'YYYY-MM-DD'), :total_pago)`,
-            [id_factura, id_usuario, fecha_pago, total_pago],
+            `BEGIN paquetee_facturas.INSERTAR_FACTURA(:id_usuario, TO_DATE(:fecha_pago, 'YYYY-MM-DD'), :total_pago, :id_inventario, :cantidad_vendida, :n_linea, :total_linea); END;`,
+            {
+                id_usuario: id_usuario,
+                fecha_pago: fecha_pago,
+                total_pago: total_pago,
+                id_inventario: id_inventario,
+                cantidad_vendida: cantidad_vendida,
+                n_linea: n_linea,
+                total_linea: total_linea
+
+            },
             { autoCommit: true }
         );
 

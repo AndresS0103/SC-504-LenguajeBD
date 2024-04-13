@@ -271,14 +271,14 @@ CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
         correo IN VARCHAR2
     );
     procedure EDITAR_USUARIO(
-	    id_usuario IN NUMBER,
-        nombre IN VARCHAR2,
-        prim_apellido IN VARCHAR2,
-        seg_apellido IN VARCHAR2,
-        cedula IN NUMBER,
-        rol IN VARCHAR2,
-        telefono_usuario IN VARCHAR2,
-        correo IN VARCHAR2
+	    id_usuario2 IN NUMBER,
+        nombre2 IN VARCHAR2,
+        prim_apellido2 IN VARCHAR2,
+        seg_apellido2 IN VARCHAR2,
+        cedula2 IN NUMBER,
+        rol2 IN VARCHAR2,
+        telefono_usuario2 IN VARCHAR2,
+        correo2 IN VARCHAR2
     );
     
     PROCEDURE BUSCAR_USUARIO_POR_ID(
@@ -351,26 +351,29 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     
     --PROCEDIMIENTO EDITAR USUARIO
     PROCEDURE EDITAR_USUARIO(
-        id_usuario IN NUMBER,
-        nombre IN VARCHAR2,
-        prim_apellido IN VARCHAR2,
-        seg_apellido IN VARCHAR2,
-        cedula IN NUMBER,
-        rol IN VARCHAR2,
-        telefono_usuario IN VARCHAR2,
-        correo IN VARCHAR2
-    )IS
-    BEGIN
-        UPDATE hr.USUARIO SET 
-            nombre= nombre,
-            prim_apellido= prim_apellido,
-            seg_apellido=  seg_apellido,
-            cedula= cedula,
-            rol = rol,
-            telefono_usuario = telefono_usuario,
-            correo = correo
-        WHERE id_usuario = id_usuario;
-    END EDITAR_USUARIO;
+    id_usuario2 IN NUMBER,
+    nombre2 IN VARCHAR2,
+    prim_apellido2 IN VARCHAR2,
+    seg_apellido2 IN VARCHAR2,
+    cedula2 IN NUMBER,
+    rol2 IN VARCHAR2,
+    telefono_usuario2 IN VARCHAR2,
+    correo2 IN VARCHAR2
+) IS
+BEGIN
+    UPDATE hr.USUARIO SET 
+        nombre = nombre2,
+        prim_apellido = prim_apellido2,
+        seg_apellido = seg_apellido2,
+        cedula = cedula2,
+        rol = rol2,
+        telefono_usuario = telefono_usuario2,
+        correo = correo2
+    WHERE id_usuario = id_usuario2; 
+    
+    COMMIT;
+END EDITAR_USUARIO;
+
     
     --PROCEDIMIENTO BUSCAR USUARIO POR ID PARA LUEGO EDITAR
     PROCEDURE BUSCAR_USUARIO_POR_ID(
@@ -413,6 +416,7 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     END BUSCAR_USUARIO_POR_ID;
 
 END paquete_usuarios;
+
 
 CREATE OR REPLACE PACKAGE BODY paquetee_facturas IS
     

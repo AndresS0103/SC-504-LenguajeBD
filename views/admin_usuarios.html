@@ -18,6 +18,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="./assets/css/usuarios.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -103,8 +106,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!--MOSTRAR USUARIOS-->
       <div class="content-header">
         <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
+          <div class="row mb-8">
+            <div class="col-sm-14">
               <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
@@ -149,13 +152,75 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <br>
                               </div>
                               <div class="col-10">
-                                <button type="submit" class="btn btn-primary">Agregar
-                                  Usuario</button>
-                              </div>
-                              <div class="col-10">
+                                <button type="submit" class="btn btn-primary">Agregar Usuario</button>
                                 <button class="btn btn-outline-dark" onclick="limpiarForm()">limpiar</button>
+
                               </div>
                             </form>
+                            <br>
+
+                            <!--ACCORDION-->
+                            <div class="accordion" id="accordionExample">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                  <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    SECCION EDITAR
+                                  </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show"
+                                  data-bs-parent="#accordionExample">
+                                  <div class="accordion-body">
+                                    <!--FORM EDITAR-->
+                                    <form id="editar-usuario-form" class="row g-3">
+                                      <div class="col-10">
+                                        <input type="number" class="form-control" id="id_usuario2" name="id_usuario2"
+                                          placeholder="id_usuario2" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="text" class="form-control" id="nombre2" name="nombre2"
+                                          placeholder="Nombre" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="text" class="form-control" id="prim_apellido2"
+                                          name="prim_apellido2" placeholder="Primer Apellido" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="text" class="form-control" id="seg_apellido2" name="seg_apellido2"
+                                          placeholder="Segundo Apellido" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="number" class="form-control" id="cedula2" name="cedula2"
+                                          placeholder="Cédula" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="text" class="form-control" id="rol2" name="rol2" placeholder="Rol"
+                                          required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="number" class="form-control" id="telefono_usuario2"
+                                          name="telefono_usuario2" placeholder="Teléfono" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <input type="email" class="form-control" id="correo2" name="correo2"
+                                          placeholder="Correo" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
+                                        <button type="submit">Actualizar</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             <br>
                           </div>
 
@@ -170,6 +235,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <th>Rol</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
+                                <th>Acciones</th>
                               </tr>
                             </thead>
                             <tbody id="usuario-body"></tbody>
@@ -180,6 +246,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
                           <script>
+
+                            let id_usuario_global; // Definir una variable global para almacenar el ID de usuario
+
+                            function llenarFormulario(id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo) {
+                              // Llenar el formulario con los datos del usuario
+                              $('#id_usuario2').val(id_usuario);
+                              $('#nombre2').val(nombre);
+                              $('#prim_apellido2').val(prim_apellido);
+                              $('#seg_apellido2').val(seg_apellido);
+                              $('#cedula2').val(cedula);
+                              $('#rol2').val(rol);
+                              $('#telefono_usuario2').val(telefono_usuario);
+                              $('#correo2').val(correo);
+
+                              // Guardar el ID del usuario en la variable global
+                              id_usuario_global = id_usuario;
+                              console.log(id_usuario_global);
+                            }
+
+
 
                             function limpiarForm() {
                               $('#nombre').val("");
@@ -233,6 +319,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 });
                               });
 
+                              //editar usuario
+                              $(document).ready(function () {
+
+                                $('#editar-usuario-form').submit(function (event) {
+                                  event.preventDefault();
+                                  const id_usuario = $('#id_usuario2').val();
+                                  const nombre = $('#nombre2').val();
+                                  const prim_apellido = $('#prim_apellido2').val();
+                                  const seg_apellido = $('#seg_apellido2').val();
+                                  const cedula = $('#cedula2').val();
+                                  const rol = $('#rol2').val();
+                                  const telefono_usuario = $('#telefono_usuario2').val();
+                                  const correo = $('#correo2').val();
+
+                                  $.ajax({
+                                    url: '/editarUsuario',
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                      id_usuario2: id_usuario,
+                                      nombre2: nombre,
+                                      prim_apellido2: prim_apellido,
+                                      seg_apellido2: seg_apellido,
+                                      cedula2: cedula,
+                                      rol2: rol,
+                                      telefono_usuario2: telefono_usuario,
+                                      correo2: correo
+                                    }),
+                                    success: function (response) {
+                                      alert(response.message);
+                                      updateUsuariosTable();
+                                    },
+                                    error: function (error) {
+                                      console.error('Error al actualizar usuario:', error);
+                                      alert('Error al actualizar usuario. Consulta la consola para más detalles.');
+                                    }
+                                  });
+                                });
+
+                              });
+
+
                               function updateUsuariosTable() {
                                 $.get('/usuarios', function (usuarios) {
                                   const usuarioBody = $('#usuario-body');
@@ -249,6 +377,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <td>${usuario[5]}</td>
                                                         <td>${usuario[6]}</td>
                                                         <td>${usuario[7]}</td>
+                                                        <td><button onclick="llenarFormulario('${usuario[0]}', '${usuario[1]}', '${usuario[2]}', '${usuario[3]}', '${usuario[4]}', '${usuario[5]}', '${usuario[6]}', '${usuario[7]}')">Actualizar</button></td>
                                                         </tr>
                                                                               `);
                                   });
@@ -283,6 +412,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
       <!-- AdminLTE App -->
       <script src="dist/js/adminlte.min.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

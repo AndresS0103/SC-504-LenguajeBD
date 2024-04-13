@@ -7,6 +7,15 @@ const { obtenerUsuarios } = require('./conexion');
 const { obtenerFacturas } = require('./conexion');
 
 
+/*
+    Andres
+    - hacer el procedimiento con el bulk collect para iniciar sesion
+    - crear el diseno para el inicio de sesion
+    - hacer el diseno de la seccion de usuarios
+    - activar o inactivar usuarios
+*/ 
+
+
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
@@ -43,7 +52,7 @@ app.post('/usuariosInsertar', async (req, res) => {
                 rol: rol,
                 telefono_usuario: telefono_usuario,
                 correo: correo
-            } 
+            }
         );
 
         connection.close();
@@ -51,6 +60,40 @@ app.post('/usuariosInsertar', async (req, res) => {
     } catch (error) {
         console.error('Error al insertar usuario:', error);
         res.status(500).json({ error: 'Error interno al insertar usuario' });
+    }
+});
+
+//Editar Usuarios
+app.post('/editarUsuario', async (req, res) => {
+
+    const { id_usuario2, nombre2, prim_apellido2, seg_apellido2, cedula2, rol2, telefono_usuario2, correo2 } = req.body;
+
+    try {
+        const connection = await oracledb.getConnection(dbConfig);
+
+        const result = await connection.execute(
+            `BEGIN 
+                paquete_usuarios.EDITAR_USUARIO(:id_usuario2, :nombre2, :prim_apellido2, :seg_apellido2, :cedula2, :rol2, :telefono_usuario2, :correo2); 
+            END;`,
+            {
+                id_usuario2,
+                nombre2,
+                prim_apellido2,
+                seg_apellido2,
+                cedula2,
+                rol2,
+                telefono_usuario2,
+                correo2
+            }
+        );
+
+        await connection.commit(); // Commit de la transacción
+        await connection.close(); // Cerrar la conexión
+
+        res.status(200).json({ message: 'Usuario actualizado exitosamente' });
+    } catch (error) {
+        console.error('Error al editar usuario:', error);
+        res.status(500).json({ message: 'Error al editar usuario. Consulta la consola para más detalles.' });
     }
 });
 

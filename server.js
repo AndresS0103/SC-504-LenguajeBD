@@ -9,9 +9,8 @@ const { obtenerFacturas } = require('./conexion');
 
 /*
     Andres
-    - hacer el procedimiento con el bulk collect para iniciar sesion
-    - crear el diseno para el inicio de sesion
     - hacer el diseno de la seccion de usuarios
+    -logica para iniciar sesion
     - activar o inactivar usuarios
 */ 
 
@@ -96,6 +95,41 @@ app.post('/editarUsuario', async (req, res) => {
         res.status(500).json({ message: 'Error al editar usuario. Consulta la consola para más detalles.' });
     }
 });
+
+app.post('/iniciarSesion', async (req, res) => {
+    const { correo, contrasena } = req.body;
+
+    try {
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN iniciar_sesion(:correo_input, :contra_input, :numero); END;`,
+            {
+                correo_input: correo,
+                contra_input: contrasena,
+                numero: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
+            }
+        );
+
+        const numero = result.outBinds.numero; 
+
+        console.log(numero);
+
+        if(numero == 1){
+            res.status(200).json({ message: 'Inicio De Sesion Exitoso' });
+        }else{
+            res.status(200).json({ message: 'Correo y Contraseña no validos' });
+        }
+
+        connection.close();
+
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        res.status(500).json({ error: 'Error interno al iniciar sesión' });
+    }
+});
+
+
+
 
 
 

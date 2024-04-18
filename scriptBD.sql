@@ -829,3 +829,48 @@ BEGIN
 END;
 
 
+--procedimiento para el inicio de sesion
+CREATE OR REPLACE PROCEDURE iniciar_sesion(
+    correo_input IN VARCHAR2,
+    contra_input IN VARCHAR2,
+    numero OUT NUMBER
+)
+IS
+    c_limit PLS_INTEGER := 10;
+    
+    CURSOR usuarios_cur
+    IS
+        SELECT correo, contrasena  
+        FROM usuario;
+        
+    TYPE usuario_info_rec IS RECORD (
+        correo usuario.correo%TYPE,
+        contrasena usuario.contrasena%TYPE
+    );
+    
+    TYPE usuario_info_t IS TABLE OF usuario_info_rec;
+    
+    l_usuario_info usuario_info_t;
+BEGIN
+    numero := 0;
+    
+    OPEN usuarios_cur;
+    LOOP
+        FETCH usuarios_cur
+        BULK COLLECT INTO l_usuario_info
+        LIMIT c_limit;
+        
+        FOR indx IN 1 .. l_usuario_info.COUNT
+        LOOP
+            IF l_usuario_info(indx).correo = correo_input AND l_usuario_info(indx).contrasena = contra_input THEN
+                numero := 1;
+                DBMS_OUTPUT.PUT_LINE('Inicio de Sesion Exitoso');
+            END IF;
+        END LOOP;
+        
+        EXIT WHEN l_usuario_info.COUNT = 0;
+    END LOOP;
+    
+    CLOSE usuarios_cur;
+END iniciar_sesion;
+

@@ -115,7 +115,9 @@ app.post('/iniciarSesion', async (req, res) => {
         console.log(numero);
 
         if(numero == 1){
-            res.status(200).json({ message: 'Inicio De Sesion Exitoso' });
+            res.status(200).json({ message: 'admin' });
+        }else if(numero ==2){
+            res.status(200).json({ message: 'normal' });
         }else{
             res.status(200).json({ message: 'Correo y Contraseña no validos' });
         }

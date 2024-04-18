@@ -148,8 +148,14 @@ https://www.tooplate.com/view/2127-little-fashion
                         contrasena
                     }),
                     success: function (response) {
-                        alert(response.message);
-                        window.location.href = 'index.html';
+                        console.log(response.message);
+                        if(response.message == 'admin'){
+                            window.location.href = 'index.html';
+                        }else if(response.message == 'normal'){
+                            window.location.href = 'index2.html';
+                        }
+                        /*alert(response.message);
+                        console.log(response.message);*/
                     },
                     error: function (error) {
                         console.error('Error al iniciar sesión:', error);

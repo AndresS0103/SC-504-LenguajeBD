@@ -840,12 +840,13 @@ IS
     
     CURSOR usuarios_cur
     IS
-        SELECT correo, contrasena  
+        SELECT correo, contrasena, rol  
         FROM usuario;
         
     TYPE usuario_info_rec IS RECORD (
         correo usuario.correo%TYPE,
-        contrasena usuario.contrasena%TYPE
+        contrasena usuario.contrasena%TYPE,
+        rol usuario.rol%TYPE
     );
     
     TYPE usuario_info_t IS TABLE OF usuario_info_rec;
@@ -864,7 +865,12 @@ BEGIN
         LOOP
             IF l_usuario_info(indx).correo = correo_input AND l_usuario_info(indx).contrasena = contra_input THEN
                 numero := 1;
-                DBMS_OUTPUT.PUT_LINE('Inicio de Sesion Exitoso');
+                IF l_usuario_info(indx).rol = 'admin' THEN
+                    numero := 1;
+                ELSIF l_usuario_info(indx).rol = 'normal' THEN
+                    numero :=2;
+                END IF;
+                
             END IF;
         END LOOP;
         
@@ -873,4 +879,3 @@ BEGIN
     
     CLOSE usuarios_cur;
 END iniciar_sesion;
-

@@ -268,7 +268,8 @@ CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
         cedula IN NUMBER,
         rol IN VARCHAR2,
         telefono_usuario IN VARCHAR2,
-        correo IN VARCHAR2
+        correo IN VARCHAR2,
+        contrasena IN VARCHAR2
     );
     procedure EDITAR_USUARIO(
 	    id_usuario2 IN NUMBER,
@@ -295,7 +296,6 @@ CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
 END paquete_usuarios;
 
 
-
 CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     --PROCEDIMIENTO INSERTAR USUARIO
     PROCEDURE INSERTAR_USUARIO(
@@ -305,7 +305,8 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
         cedula IN NUMBER,
         rol IN VARCHAR2,
         telefono_usuario IN VARCHAR2,
-        correo IN VARCHAR2
+        correo IN VARCHAR2,
+        contrasena IN VARCHAR2
     )IS
     BEGIN
         INSERT INTO hr.USUARIO (
@@ -315,7 +316,8 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
             cedula,
             rol,
             telefono_usuario,
-            correo
+            correo,
+            contrasena
         ) VALUES (
             nombre,
             prim_apellido,
@@ -323,7 +325,8 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
             cedula,
             rol,
             telefono_usuario,
-            correo
+            correo,
+            contrasena
         );
 
         COMMIT;
@@ -416,7 +419,6 @@ END EDITAR_USUARIO;
     END BUSCAR_USUARIO_POR_ID;
 
 END paquete_usuarios;
-
 
 CREATE OR REPLACE PACKAGE BODY paquetee_facturas IS
     

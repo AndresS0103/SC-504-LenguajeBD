@@ -9,8 +9,20 @@ const { obtenerFacturas } = require('./conexion');
 
 /*
     Andres
+    --
+    editar contra
+    modificar procedimiento editar en sql
+    modificar en server.js
+    agregar fila del form en html update
+    agregar el usuario8 en llenar formulario
+
+    hacer la presentacion de bd
+
     - hacer el diseno de la seccion de usuarios
-    -logica para iniciar sesion
+    
+    --
+
+    - hacer el diseno de la seccion de usuarios
     - activar o inactivar usuarios
 */ 
 
@@ -37,12 +49,12 @@ app.get('/usuarios', async (req, res) => {
 
 //insertar usuarios
 app.post('/usuariosInsertar', async (req, res) => {
-    const { nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo } = req.body;
+    const { nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo, contrasena } = req.body;
 
     try {
         const connection = await oracledb.getConnection(dbConfig);
         const result = await connection.execute(
-            `BEGIN paquete_usuarios.INSERTAR_USUARIO(:nombre, :prim_apellido, :seg_apellido, :cedula, :rol, :telefono_usuario, :correo); END;`,
+            `BEGIN paquete_usuarios.INSERTAR_USUARIO(:nombre, :prim_apellido, :seg_apellido, :cedula, :rol, :telefono_usuario, :correo, :contrasena); END;`,
             {
                 nombre: nombre,
                 prim_apellido: prim_apellido,
@@ -50,7 +62,8 @@ app.post('/usuariosInsertar', async (req, res) => {
                 cedula: cedula,
                 rol: rol,
                 telefono_usuario: telefono_usuario,
-                correo: correo
+                correo: correo,
+                contrasena: contrasena
             }
         );
 

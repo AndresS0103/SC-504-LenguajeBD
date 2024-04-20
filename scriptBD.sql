@@ -279,7 +279,8 @@ CREATE OR REPLACE PACKAGE hr.paquete_usuarios IS
         cedula2 IN NUMBER,
         rol2 IN VARCHAR2,
         telefono_usuario2 IN VARCHAR2,
-        correo2 IN VARCHAR2
+        correo2 IN VARCHAR2,
+        contrasena2 IN VARCHAR2
     );
     
     PROCEDURE BUSCAR_USUARIO_POR_ID(
@@ -361,7 +362,8 @@ CREATE OR REPLACE PACKAGE BODY hr.paquete_usuarios IS
     cedula2 IN NUMBER,
     rol2 IN VARCHAR2,
     telefono_usuario2 IN VARCHAR2,
-    correo2 IN VARCHAR2
+    correo2 IN VARCHAR2,
+    contrasena2 IN VARCHAR2
 ) IS
 BEGIN
     UPDATE hr.USUARIO SET 
@@ -371,7 +373,8 @@ BEGIN
         cedula = cedula2,
         rol = rol2,
         telefono_usuario = telefono_usuario2,
-        correo = correo2
+        correo = correo2,
+        contrasena = contrasena2
     WHERE id_usuario = id_usuario2; 
     
     COMMIT;

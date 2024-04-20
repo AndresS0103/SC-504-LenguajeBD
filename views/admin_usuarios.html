@@ -219,6 +219,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <br>
                                       </div>
                                       <div class="col-10">
+                                        <input type="text" class="form-control" id="contrasena2" name="contraasena2"
+                                          placeholder="Contraseña" required>
+                                        <br>
+                                      </div>
+                                      <div class="col-10">
                                         <button type="submit" class="btn btn-outline-primary">Actualizar</button>
                                       </div>
                                     </form>
@@ -255,7 +260,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             let id_usuario_global; // Definir una variable global para almacenar el ID de usuario
 
-                            function llenarFormulario(id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo) {
+                            function llenarFormulario(id_usuario, nombre, prim_apellido, seg_apellido, cedula, rol, telefono_usuario, correo, contrasena) {
                               // Llenar el formulario con los datos del usuario
                               $('#id_usuario2').val(id_usuario);
                               $('#nombre2').val(nombre);
@@ -265,6 +270,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               $('#rol2').val(rol);
                               $('#telefono_usuario2').val(telefono_usuario);
                               $('#correo2').val(correo);
+                              $('#contrasena2').val(contrasena);
 
                               // Guardar el ID del usuario en la variable global
                               id_usuario_global = id_usuario;
@@ -283,6 +289,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                               $('#correo').val("");
                               $('#contrasena').val("");
 
+                            }
+
+                            function limpiarFormEditar(){
+                              $('#nombre2').val("");
+                              $('#prim_apellido2').val("");
+                              $('#seg_apellido2').val("");
+                              $('#cedula2').val("");
+                              $('#rol2').val("");
+                              $('#telefono_usuario2').val("");
+                              $('#correo2').val("");
+                              $('#contrasena2').val("");
                             }
 
 
@@ -341,6 +358,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                   const rol = $('#rol2').val();
                                   const telefono_usuario = $('#telefono_usuario2').val();
                                   const correo = $('#correo2').val();
+                                  const contrasena = $('#contrasena2').val();
 
                                   $.ajax({
                                     url: '/editarUsuario',
@@ -354,11 +372,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                       cedula2: cedula,
                                       rol2: rol,
                                       telefono_usuario2: telefono_usuario,
-                                      correo2: correo
+                                      correo2: correo,
+                                      contrasena2: contrasena
                                     }),
                                     success: function (response) {
                                       alert(response.message);
                                       updateUsuariosTable();
+                                      limpiarFormEditar();
                                     },
                                     error: function (error) {
                                       console.error('Error al actualizar usuario:', error);
@@ -387,7 +407,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <td>${usuario[6]}</td>
                                                         <td>${usuario[7]}</td>
                                                         <td>${usuario[8]}</td>
-                                                        <td><button onclick="llenarFormulario('${usuario[0]}', '${usuario[1]}', '${usuario[2]}', '${usuario[3]}', '${usuario[4]}', '${usuario[5]}', '${usuario[6]}', '${usuario[7]}')">Actualizar</button></td>
+                                                        <td><button onclick="llenarFormulario('${usuario[0]}', '${usuario[1]}', '${usuario[2]}', '${usuario[3]}', '${usuario[4]}', '${usuario[5]}', '${usuario[6]}', '${usuario[7]}', '${usuario[8]}')">Actualizar</button></td>
                                                         </tr>
                                                                               `);
                                   });

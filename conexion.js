@@ -3,8 +3,8 @@ const oracledb = require('oracledb');
 async function conectarBaseDatos() {
     try {
         const connection = await oracledb.getConnection({
-            user: "hr",
-            password: "Hola123456789",
+            user: "HR",
+            password: "12345",
             connectString: "localhost/orcl"
         });
         return connection;
@@ -88,65 +88,65 @@ module.exports = {conectarBaseDatos, insertarUsuario};
 
 
 
-    // crear facturas 
+async function agregarFactura(id_usuario, fecha_pago, total_pago, detalle) {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        await connection.beginTransaction();
 
-    async function agregarFactura(id_factura, id_usuario, fecha_pago, total_pago, detalle) {
-        let connection;
-        try {
-            connection = await conectarBaseDatos();
-            await connection.beginTransaction();
+        const resultFactura = await connection.execute(
+            `INSERT INTO FACTURA (id_usuario, fecha_pago, total_pago) VALUES (:id_usuario, TO_DATE(:fecha_pago, 'YYYY-MM-DD'), :total_pago) RETURNING id_factura INTO :id_factura`,
+            { id_usuario, fecha_pago, total_pago, id_factura: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER } }
+        );
 
-            // Insertar en la tabla FACTURA
+        const id_factura = resultFactura.outBinds.id_factura[0];
+
+        for (const detalleItem of detalle) {
             await connection.execute(
-                `INSERT INTO FACTURA (id_factura, id_usuario, fecha_pago, total_pago) VALUES (:id_factura, :id_usuario, TO_DATE(:fecha_pago, 'YYYY-MM-DD'), :total_pago)`,
-                [id_factura, id_usuario, fecha_pago, total_pago]
+                `INSERT INTO detalle_factura (id_factura, id_inventario, cantidad_vendida, n_linea, total_linea) VALUES (:id_factura, :id_inventario, :cantidad_vendida, :n_linea, :total_linea)`,
+                [id_factura, detalleItem.id_inventario, detalleItem.cantidad_vendida, detalleItem.n_linea, detalleItem.total_linea]
             );
+        }
 
-            // Insertar en la tabla detalle_factura
-            for (const detalleItem of detalle) {
-                await connection.execute(
-                    `INSERT INTO detalle_factura (id_factura, id_inventario, cantidad_vendida, n_linea, total_linea) VALUES (:id_factura, :id_inventario, :cantidad_vendida, :n_linea, :total_linea)`,
-                    [id_factura, detalleItem.id_inventario, detalleItem.cantidad_vendida, detalleItem.n_linea, detalleItem.total_linea]
-                );
+        await connection.commit();
+    } catch (error) {
+        console.error('Error al agregar factura:', error);
+        if (connection) {
+            try {
+                await connection.rollback();
+            } catch (rollbackError) {
+                console.error('Error al hacer rollback:', rollbackError);
             }
-
-            // Commit
-            await connection.commit();
-        } catch (error) {
-            console.error('Error al agregar factura:', error);
-            // Rollback en caso de error
-            if (connection) {
-                try {
-                    await connection.rollback();
-                } catch (rollbackError) {
-                    console.error('Error al hacer rollback:', rollbackError);
-                }
-            }
-            throw error;
-        } finally {
-            if (connection) {
-                try {
-                    await connection.close();
-                } catch (error) {
-                    console.error('Error al cerrar la conexión:', error);
-                }
+        }
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (error) {
+                console.error('Error al cerrar la conexión:', error);
             }
         }
     }
-
+}
 
 
     async function obtenerFacturas() {
         let connection;
         try {
             connection = await conectarBaseDatos();
-            const result = await connection.execute(`
-                SELECT f.*, df.*
-                FROM FACTURA f
-                JOIN DETALLE_FACTURA df ON f.id_factura = df.id_factura
-                ORDER BY f.id_factura ASC
-            `);
-            const facturas = result.rows;
+            const result = await connection.execute(
+                `BEGIN paquete_factuuras.ver_facturas(:facturas_cursor); END;`,
+                { facturas_cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR } }
+            );
+    
+            const facturasCursor = result.outBinds.facturas_cursor;
+            let facturas = [];
+            let row;
+            while ((row = await facturasCursor.getRow())) {
+                facturas.push(row);
+            }
+            await facturasCursor.close();
             return facturas;
         } catch (error) {
             console.error('Error al obtener las facturas:', error);

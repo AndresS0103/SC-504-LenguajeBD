@@ -31,8 +31,8 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
 const dbConfig = {
-    user: 'hr',
-    password: 'Hola123456789',
+    user: 'HR',
+    password: '12345',
     connectString: 'localhost/orcl'
 };
 

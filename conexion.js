@@ -293,4 +293,66 @@ async function insertarInventario(id_modelo, nombre_inv, precio_unidad, stock, s
     }
 }
 
-    module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas, obtenerInventarios, obtenerModelos};
+async function obtenerProveedores() {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        const result = await connection.execute(
+            `BEGIN paquete_proovedores.ver_proveedor(:proveedores_cursor); END;`,
+            { proveedores_cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR } }
+        );
+
+        const proveedoresCursor = result.outBinds.proveedores_cursor;
+        let proveedores = [];
+        let row;
+        while ((row = await proveedoresCursor.getRow())) {
+            proveedores.push(row);
+        }
+        await proveedoresCursor.close();
+        return proveedores;
+    } catch (error) {
+        console.error('Error al obtener los proveedores:', error);
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error al cerrar la conexión:', err);
+            }
+        }
+    }
+}
+
+async function insertarProveedor(nombre_prov, num_tel_prov, sucursal, email) {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        await connection.beginTransaction();
+
+        await connection.execute(
+            `BEGIN paquete_proovedores.INSERTAR_PROVEEDOR(:nombre_prov, :num_tel_prov, :sucursal :email); END;`,
+            {
+                nombre_prov: nombre_prov,
+                num_tel_prov: num_tel_prov,
+                sucursal: sucursal,
+                email: email
+            }
+        );
+
+        console.log('Proveedor insertado correctamente.');
+
+    } catch (error) {
+        console.error('Error al insertar proveedor:', error);
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error al cerrar la conexión:', err);
+            }
+        }
+    }
+}
+module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas, obtenerInventarios, obtenerModelos, obtenerProveedores, insertarProveedor};

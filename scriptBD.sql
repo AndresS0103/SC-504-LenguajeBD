@@ -1133,3 +1133,99 @@ BEGIN
     
     CLOSE usuarios_cur;
 END iniciar_sesion;
+
+--Todo lo de proveedores
+CREATE SEQUENCE SEQ_PROVEEDOR
+  START WITH 1
+  INCREMENT BY 1;
+ 
+ 
+CREATE OR REPLACE TRIGGER Trg_GenerarSecuencia_PROVEEDOR
+BEFORE INSERT ON PROVEEDOR
+FOR EACH ROW
+BEGIN
+  :NEW.ID_PROVEEDOR := SEQ_PROVEEDOR.NEXTVAL;
+END;
+
+-- Paquete de marcas
+CREATE OR REPLACE PACKAGE paquete_proovedores IS
+    TYPE proveedores_cursor IS REF CURSOR;
+
+    PROCEDURE insertar_proveedor(
+        nombre_prov IN proveedor.nombre_prov%type,
+        num_tel_prov IN proveedor.num_tel_prov%type,
+        sucursal IN proveedor.sucursal%type,
+        email IN proveedor.email%type
+    );
+    
+    PROCEDURE editar_proveedor(
+        id_proveedor2 IN NUMBER,
+        nombre_prov2 IN proveedor.nombre_prov%type,
+        num_tel_prov2 IN proveedor.num_tel_prov%type,
+        sucursal2 IN proveedor.sucursal%type,
+        email2 IN proveedor.email%type
+    );
+
+    PROCEDURE ver_proveedor(
+        proveedores_cursor OUT SYS_REFCURSOR
+    );
+END paquete_proovedores;
+/
+
+-- Paquete de Cuerpo
+CREATE OR REPLACE PACKAGE BODY paquete_proovedores IS
+
+    PROCEDURE insertar_proveedor(
+        nombre_prov IN proveedor.nombre_prov%type,
+        num_tel_prov IN proveedor.num_tel_prov%type,
+        sucursal IN proveedor.sucursal%type,
+        email IN proveedor.email%type
+    ) IS
+    BEGIN
+        INSERT INTO PROVEEDOR (
+        nombre_prov,
+        num_tel_prov,
+        sucursal,
+        email
+        ) VALUES (
+        nombre_prov,
+        num_tel_prov,
+        sucursal,
+        email
+        );
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al insertar la marca:  ' || SQLERRM);
+    END insertar_proveedor;
+
+    PROCEDURE editar_proveedor(
+        id_proveedor2 IN NUMBER,
+        nombre_prov2 IN proveedor.nombre_prov%type,
+        num_tel_prov2 IN proveedor.num_tel_prov%type,
+        sucursal2 IN proveedor.sucursal%type,
+        email2 IN proveedor.email%type
+    ) IS
+    BEGIN
+        UPDATE PROVEEDOR SET 
+            nombre_prov = nombre_prov2,
+            num_tel_prov = num_tel_prov2,
+            sucursal = sucursal2,
+            email = email2
+        WHERE id_proveedor = id_proveedor2; 
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al editar la marca: ' || SQLERRM);
+    END editar_proveedor;
+
+    PROCEDURE ver_proveedor(
+        proveedores_cursor OUT SYS_REFCURSOR
+    ) IS
+    BEGIN
+        OPEN proveedores_cursor FOR
+            SELECT id_proveedor, nombre_prov, num_tel_prov, email, sucursal  FROM proveedor;
+    END ver_proveedor;
+
+END paquete_proovedores;

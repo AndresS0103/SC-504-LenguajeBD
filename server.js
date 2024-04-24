@@ -8,6 +8,7 @@ const { obtenerFacturas } = require('./conexion');
 const { obtenerMarcas } = require('./conexion');
 const { obtenerModelos } = require('./conexion');
 const { obtenerInventarios } = require('./conexion');
+const { obtenerProveedores } = require('./conexion');
 
 
 
@@ -330,6 +331,62 @@ app.post('/editarInventario', async (req, res) => {
     catch(error){
         console.error('Error al editar inventario:', error);
         res.status(500).json({ error: 'Error interno al editar inventario' });
+    }
+});
+
+app.get('/proveedores', async (req, res) => {
+    try {
+        const proveedores = await obtenerProveedores();
+        res.json(proveedores);
+    } catch (error) {
+        console.error('Error al obtener los proveedores:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+app.post('/proveedorInsertar', async (req, res) => {
+    const {nombre_prov, num_tel_prov, sucursal, email} = req.body;
+    try{
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_proovedores.INSERTAR_PROVEEDOR(:nombre_prov, :num_tel_prov, :sucursal, :email); END;`,
+            {
+                nombre_prov: nombre_prov,
+                num_tel_prov: num_tel_prov,
+                sucursal: sucursal,
+                email: email
+            },{ autoCommit: true }
+        );
+        connection.close();
+        res.status(200).json({ message: 'Proveedor agregado exitosamente' });
+    }
+    catch(error){
+        console.error('Error al insertar proveedor:', error);
+        res.status(500).json({ error: 'Error interno al insertar proveedor' });
+    }
+});
+
+app.post('/editarProveedor', async (req, res) => {
+    const {id_proveedor2, nombre_prov2, num_tel_prov2, sucursal2, email2} = req.body;
+    try{
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_proovedores.EDITAR_PROVEEDOR(:id_proveedor2, :nombre_prov2, :num_tel_prov2, :sucursal2, :email2); END;`,
+            {
+                id_proveedor2,
+                nombre_prov2,
+                num_tel_prov2,
+                sucursal2,
+                email2
+            },{ autoCommit: true }
+        );
+        await connection.commit();
+        connection.close();
+        res.status(200).json({ message: 'Proveedor editado exitosamente' });
+    }
+    catch(error){
+        console.error('Error al editar proveedor:', error);
+        res.status(500).json({ error: 'Error interno al editar proveedor' });
     }
 });
 

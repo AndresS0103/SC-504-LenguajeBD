@@ -3,7 +3,7 @@ const oracledb = require('oracledb');
 async function conectarBaseDatos() {
     try {
         const connection = await oracledb.getConnection({
-            user: "HR",
+            user: "USERSERVICE",
             password: "12345",
             connectString: "localhost/orcl"
         });
@@ -227,4 +227,70 @@ async function obtenerModelos() {
 }
 
 
-    module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas, obtenerMarcas, obtenerModelos };
+async function obtenerInventarios() {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        const result = await connection.execute(
+            `BEGIN paquete_inventario.obtener_inventarios(:inventarios_cursor); END;`,
+            { inventarios_cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR } }
+        );
+        const inventariosCursor = result.outBinds.inventarios_cursor;
+        let inventarios = [];
+        let row;
+        while ((row = await inventariosCursor.getRow())) {
+            inventarios.push(row);
+        }
+        await inventariosCursor.close();
+        return inventarios;
+    
+    }catch (error) {
+        console.error('Error al obtener los inventarios:', error);
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error al cerrar la conexión:', err);
+            }
+        }
+    }
+}
+
+async function insertarInventario(id_modelo, nombre_inv, precio_unidad, stock, sucursal_disponible, disponible, url_imagen) {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        await connection.beginTransaction();
+
+        await connection.execute(
+            `BEGIN paquete_inventario.INSERTAR_INVENTARIO(:id_modelo, :nombre_inv, :precio_unidad, :stock, :sucursal_disponible, :disponible, :url_imagen); END;`,
+            {
+                id_modelo: id_modelo,
+                nombre_inv: nombre_inv,
+                precio_unidad: precio_unidad,
+                stock: stock,
+                sucursal_disponible: sucursal_disponible,
+                disponible: disponible,
+                url_imagen: url_imagen
+            },{ autoCommit: true }
+        );
+
+
+    } catch (error) {
+        console.error('Error al insertar inventario:', error);
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+                console.log('Inventario insertado correctamente.');
+            } catch (err) {
+                console.error('Error al cerrar la conexión:', err);
+            }
+        }
+    }
+}
+
+    module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas, obtenerInventarios, obtenerModelos};

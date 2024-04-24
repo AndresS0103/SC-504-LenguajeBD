@@ -15,6 +15,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -48,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
+             with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -65,7 +67,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="admin_usuarios.html" class="nav-link ">
+                <a href="admin_usuarios.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Usuarios</p>
                 </a>
@@ -74,6 +76,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <a href="admin_facturas.html" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Facturas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="admin_marcas.html" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Marcas</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="admin_modelos.html" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Modelos</p>
                 </a>
               </li>
             </ul>
@@ -101,12 +115,277 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0">Inventario</h1>
+            <div class="container text-center">
+              <div class="card p-3 ">
+                <form id="add-inventario-form">
+                  <h1>Agregar</h1><br>
+                  <div class="col">
+                    <small>Modelo del Vehiculo</small>
+                    <select name="id_modelo" id="id_modelo" class="form-select"></select>
+                  </div><br>
+                  <div class="col">
+                    <input type="text" class="form-control" id="nombre_inv" name="nombre_inv" placeholder="Nombre de la Pieza">
+                  </div><br>
+                  <div class="col">
+                    <input type="number" class="form-control" id="precio_unidad" name="precio_unidad" placeholder="Precio">
+                  </div><br>
+                  <div class="col">
+                    <input type="number" class="form-control" id="stock" name="stock" placeholder="Cantidad Disponible">
+                  </div><br>
+                  <div class="col">
+                    <input type="text" class="form-control" id="sucursal_disponible" name="sucursal_disponible" placeholder="Sucursal Disponible">
+                  </div><br>
+                  <div class="col-10">
+                    <input type="hidden" class="form-control" id="disponible" name="disponible"
+                      placeholder="rol" value="1" required>
+                  </div><br>
+                  <div class="col-10">
+                    <input type="file" class="form-control" id="url_imagen" name="url_imagen" placeholder="Imagen" accept="images/png, images/jpeg">
+                  </div><br>
+                  <div class="col-10">
+                    <button type="submit" class="btn btn-primary">Agregar Inventario</button>
+                    <button class="btn btn-outline-dark" onclick="limpiarForm()">limpiar</button>
+                  </div>
+                </form>
+              </div>
+              <div class="accordion " id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      EDITAR
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <!--FORM EDITAR-->
+                      <form id="editar-inventario-form">
+                        <div class="col">
+                          <input type="hidden" class="form-control" id="id_inventario2" name="id_inventario2"
+                          placeholder="id_inventario2"></div>
+                        <div class="col">
+                          <select name="id_modelo2" id="id_modelo2" class="form-select"></select>
+                        </div><br>
+                        <div class="col">
+                          <input type="text" class="form-control" id="nombre_inv2" name="nombre_inv2" placeholder="Nombre de la Pieza">
+                        </div><br>
+                        <div class="col">
+                          <input type="number" class="form-control" id="precio_unidad2" name="precio_unidad2" placeholder="Precio">
+                        </div><br>
+                        <div class="col">
+                          <input type="number" class="form-control" id="stock2" name="stock2" placeholder="Cantidad Disponible">
+                        </div><br>
+                        <div class="col">
+                          <input type="text" class="form-control" id="sucursal_disponible2" name="sucursal_disponible2" placeholder="Sucursal Disponible">
+                        </div><br>
+                        <div class="col-10">
+                          <input type="number" class="form-control" id="disponible2" name="disponible2"
+                            placeholder="Disponible" required>
+                        </div><br>
+                        <div class="col-10">
+                          <input type="file" class="form-control" id="url_imagen2" name="url_imagen2"
+                            placeholder="Imagen" required>
+                        </div><br>
+                        <div class="col-10">
+                          <button type="submit" class="btn btn-primary">Agregar Inventario</button>
+                          <button class="btn btn-outline-dark" onclick="limpiarForm()">limpiar</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+
+              
+            </div>
+            <table id="inventario-table" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Modelo de Auto</th>
+                  <th>Nombre de la Pieza</th>
+                  <th>Precio</th>
+                  <th>Cantidad Disponible</th>
+                  <th>Sucursal Disponible</th>
+                  <th>Disponible</th>
+                  <th>Imagen</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="inventario-body"></tbody>
+            </table>
             
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    function llenarFormulario(inventario2,id_modelo, nombre_inv, precio_unidad, stock, sucursal_disponible, disponible, url_imagen) {
+      $('#id_inventario2').val(id_modelo);
+      $('#id_modelo2').val(id_modelo);
+      $('#nombre_inv2').val(nombre_inv);
+      $('#precio_unidad2').val(precio_unidad);
+      $('#stock2').val(stock);
+      $('#sucursal_disponible2').val(sucursal_disponible);
+      $('#disponible2').val(disponible);
+      $('#url_imagen2').val(url_imagen);
+    }
+
+    function limpiarFormEditar() {
+      $('#id_inventario2').val('');
+      $('#id_modelo2').val('');
+      $('#nombre_inv2').val('');
+      $('#precio_unidad2').val('');
+      $('#stock2').val('');
+      $('#sucursal_disponible2').val('');
+      $('#disponible2').val('');
+      $('#url_imagen2').val('');
+    }
+
+    function limpiarForm(){
+      $('#id_modelo').val('');
+      $('#nombre_inv').val('');
+      $('#precio_unidad').val('');
+      $('#stock').val('');
+      $('#sucursal_disponible').val('');
+      $('#disponible').val('');
+      $('#url_imagen').val('');
+    }
+    
+
+    $(document).ready(function(){
+      updateInventariosTable();
+      verMod();
+      $('#add-inventario-form').submit(function(event){
+        event.preventDefault();
+        const id_modelo = $('#id_modelo').val();
+        const nombre_inv = $('#nombre_inv').val();
+        const precio_unidad = $('#precio_unidad').val();
+        const stock = $('#stock').val();
+        const sucursal_disponible = $('#sucursal_disponible').val();
+        const disponible = $('#disponible').val();
+        const url_imagen = $('#url_imagen').val();
+    
+        $.ajax({
+          url: '/inventarioInsertar',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            id_modelo,
+            nombre_inv,
+            precio_unidad,
+            stock,
+            sucursal_disponible,
+            disponible,
+            url_imagen
+          }),
+          success: function(response){
+            alert(response.message);
+            // Actualizar la tabla de inventario
+            updateInventariosTable();
+            // Limpiar el formulario después de agregar
+            limpiarForm();
+          },
+          error: function(error){
+            console.error('Error al agregar inventario:', error);
+            alert('Error al agregar inventario. Consulta la consola para más detalles.');
+          }
+        });
+      });
+    
+      function updateInventariosTable(){
+        $.get('/inventarios', function(inventarios){
+          const inventariobody = $('#inventario-body');
+          inventariobody.empty();
+    
+          inventarios.forEach(inventario => {
+            inventariobody.append(`
+              <tr>
+                <td>${inventario[0]}</td>
+                <td>${inventario[1]}</td>
+                <td>${inventario[2]}</td>
+                <td>${inventario[3]}</td>
+                <td>${inventario[4]}</td>
+                <td>${inventario[5]}</td>
+                <td>${inventario[6]}</td>
+                <td>${inventario[7]}</td>
+                <td><button onclick="llenarFormulario('${inventario[1]}', '${inventario[2]}', '${inventario[3]}', '${inventario[4]}', '${inventario[5]}', '${inventario[6]}', '${inventario[7]}')">Actualizar</button></td>
+              </tr>
+            `);
+          });
+        });
+      }
+    });
+    function verMod(){
+      $.get('/verModelos', function(modelos){
+          const modelosbody = $('#id_modelo');
+          modelosbody.empty();
+          modelos.forEach(modelo => {
+              modelosbody.append(`
+              <option value="${modelo[0]}">${modelo[2]}</option>
+              `);
+          });
+      })
+   } 
+   function verModEd(){
+    $.get('/verModelos', function(modelos){
+        const modelosbody = $('#id_modelo2');
+        modelosbody.empty();
+        modelos.forEach(modelo => {
+            modelosbody.append(`
+            <option value="${modelo[0]}">${modelo[2]}</option>
+            `);
+        });
+    })
+ } 
+    
+    $(document).ready(function(){
+      verModEd();
+      $('#editar-inventario-form').submit(function(event){
+        event.preventDefault();
+        const id_inventario = $('#id_inventario2').val();
+        const id_modelo = $('#id_modelo2').val();
+        const nombre_inv = $('#nombre_inv2').val();
+        const precio_unidad = $('#precio_unidad2').val();
+        const stock = $('#stock2').val();
+        const sucursal_disponible = $('#sucursal_disponible2').val();
+        const disponible = $('#disponible2').val();
+        const url_imagen = $('#url_imagen2').val();
+
+        $.ajax({
+          url: '/editarInventario',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            id_inventario2: id_inventario,
+            id_modelo2: id_modelo,
+            nombre_inv2: nombre_inv,
+            precio_unidad2: precio_unidad,
+            stock2: stock,
+            sucursal_disponible2: sucursal_disponible,
+            disponible2: disponible,
+            url_imagen2: url_imagen
+          }),
+          success: function(response){
+            alert(response.message);
+            limpiarFormEditar();
+            //updateInventariosTable()
+          },
+          error: function(error){
+            console.error('Error al editar inventario:', error);
+            alert('Error al editar inventario. Consulta la consola para más detalles.');
+          }
+        });
+      });
+    })
+
+
+  </script>
 
 <!-- REQUIRED SCRIPTS -->
 
@@ -116,5 +395,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>

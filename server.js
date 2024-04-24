@@ -7,6 +7,8 @@ const { obtenerUsuarios } = require('./conexion');
 const { obtenerFacturas } = require('./conexion');
 const { obtenerMarcas } = require('./conexion');
 const { obtenerModelos } = require('./conexion');
+const { obtenerInventarios } = require('./conexion');
+
 
 
 /*
@@ -33,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.json());
 
 const dbConfig = {
-    user: 'HR',
+    user: 'USERSERVICE',
     password: '12345',
     connectString: 'localhost/orcl'
 };
@@ -264,6 +266,70 @@ app.get('/verModelos', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener los modelos:', error);
         res.status(500).send('Error interno del servidor');
+    }
+});
+
+app.get('/inventarios', async (req, res) => {
+    try {
+        const inventarios = await obtenerInventarios();
+        res.json(inventarios);
+    } catch (error) {
+        console.error('Error al obtener los inventarios:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+app.post('/inventarioInsertar', async (req, res) => {
+    const {id_modelo, nombre_inv, precio_unidad, stock, sucursal_disponible, disponible, url_imagen} = req.body;
+    try{
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_inventario.INSERTAR_INVENTARIO(:id_modelo, :nombre_inv, :precio_unidad, :stock, :sucursal_disponible, :disponible, :url_imagen); END;`,
+            {
+                id_modelo: id_modelo,
+                nombre_inv: nombre_inv,
+                precio_unidad: precio_unidad,
+                stock: stock,
+                sucursal_disponible: sucursal_disponible,
+                disponible: disponible,
+                url_imagen: url_imagen
+            },{ autoCommit: true }
+        );
+        connection.close();
+        res.status(200).json({ message: 'Inventario agregado exitosamente' });
+    }
+    catch(error){
+        console.error('Error al insertar inventario:', error);
+        res.status(500).json({ error: 'Error interno al insertar inventario' });
+    }
+});
+
+
+
+app.post('/editarInventario', async (req, res) => {
+    const {id_inventario2, id_modelo2, nombre_inv2, precio_unidad2, stock2, sucursal_disponible2, disponible2, url_imagen2} = req.body;
+    try{
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_inventario.EDITAR_INVENTARIO(:id_inventario2 ,:id_modelo2, :nombre_inv2, :precio_unidad2, :stock2, :sucursal_disponible2, :disponible2, :url_imagen2); END;`,
+            {
+                id_inventario2,
+                id_modelo2,
+                nombre_inv2,
+                precio_unidad2,
+                stock2,
+                sucursal_disponible2,
+                disponible2,
+                url_imagen2
+            },{ autoCommit: true }
+        );
+        await connection.commit();
+        connection.close();
+        res.status(200).json({ message: 'Inventario editado exitosamente' });
+    }
+    catch(error){
+        console.error('Error al editar inventario:', error);
+        res.status(500).json({ error: 'Error interno al editar inventario' });
     }
 });
 

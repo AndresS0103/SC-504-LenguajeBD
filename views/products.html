@@ -97,71 +97,8 @@ https://www.tooplate.com/view/2127-little-fashion
             </header>
             <section>
                 <div class="container">
-                    <div class="row">
-                        <div class="col">
-                                <div class="product-thumb h-100">
-                                    <a href="product-detail.html">
-                                        <img src="images/produ-1.jpg" class="img-fluid product-image" alt="">
-                                    </a>
-                
-                
-                                    <div class="product-info d-flex">
-                                        <div>
-                                            <h5 class="product-title mb-0">
-                                                <a href="product-detail.html" class="product-title-link">RIDEX 805O0013</a>
-                                            </h5>
-                
-                                            <p class="product-p">Interruptor de control de la presión de aceite</p>
-                                        </div>
-                
-                                        <small class="product-price text-muted ms-auto mt-auto mb-5">₡2585,60</small>
-                                    </div>
-                                </div>
-                            
-                        </div>
-                        <div class="col">
-                                <div class="product-thumb h-100">
-                                    <a href="product-detail.html">
-                                        <img src="images/produ-2.jpg" class="img-fluid product-image" alt="">
-                                    </a>
-                
-                
-                                    <div class="product-info d-flex">
-                                        <div>
-                                            <h5 class="product-title mb-0">
-                                                <a href="product-detail.html" class="product-title-link">BR Turbo BRTX3557</a>
-                                            </h5>
-                
-                                            <p class="product-p">Turbocompresor</p>
-                                        </div>
-                
-                                        <small class="product-price text-muted ms-auto mt-auto mb-5">₡240.482,44</small>
-                                    </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="product-thumb h-100">
-                                <a href="product-detail.html">
-                                    <img src="images/produ-3.jpg" class="img-fluid product-image" alt="">
-                                </a>
-            
-                                <div class="product-top d-flex">
-                                    <a href="#" class="bi-heart-fill product-icon ms-auto"></a>
-                                </div>
-            
-                                <div class="product-info d-flex">
-                                    <div>
-                                        <h5 class="product-title mb-0">
-                                            <a href="product-detail.html" class="product-title-link">RIDEX 4805A0002</a>
-                                        </h5>
-            
-                                        <p class="product-p">Funda para palanca de cambios</p>
-                                    </div>
-            
-                                    <small class="product-price text-muted ms-auto mt-auto mb-5">₡5182,15</small>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row" id="inventario-body">
+                        
                         
                     </div>
                 </div>
@@ -209,6 +146,43 @@ https://www.tooplate.com/view/2127-little-fashion
                 </div>
             </div>
         </footer>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+                function mostrarInventario(){
+                    $.get('/inventarios', function(inventarios){
+                        const inventariobody = $('#inventario-body');
+                        inventariobody.empty();
+                        inventarios.forEach(inventario => {
+                            if(inventario[6] > 0)
+                            inventariobody.append(`
+                            <div class="col-4">
+                                <div class="product-thumb h-100">
+                                    <a href="product-detail.html">
+                                        <img src="${inventario[7]}" class="img-fluid product-image" alt="">
+                                    </a>
+                                    <div class="product-info d-flex">
+                                        <div>
+                                            <h5 class="product-title mb-0">
+                                                <a href="product-detail.html" class="product-title-link">${inventario[2]}</a>
+                                            </h5>
+                                            <p class="product-p">Stock: ${inventario[4]}</p>
+                                            <p class="product-p">Automovil:${inventario[1]}</p>
+                                        </div>
+                                        <small class="product-price text-muted ms-auto mt-auto mb-5">₡ ${inventario[3]}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            `);
+                            
+                        });
+                    })
+                 } 
+                 $(document).ready(function(){
+                    mostrarInventario();
+                });         
+
+        </script>
 
         <!-- JAVASCRIPT FILES -->
         <script src="js/jquery.min.js"></script>

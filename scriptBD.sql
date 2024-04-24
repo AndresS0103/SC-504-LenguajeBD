@@ -157,99 +157,177 @@ ADD CONSTRAINT fk_detalle_factura_inventario FOREIGN KEY (id_inventario) REFEREN
 
 
 /*Paquete inventario*/
-CREATE OR REPLACE PACKAGE USERSERVICE.paquete_inventario IS
+/*Paquete inventario*/
+CREATE SEQUENCE SEQ_INVENTARIO
+  START WITH 1
+  INCREMENT BY 1;
+ 
+ 
+CREATE OR REPLACE TRIGGER Trg_GenerarSecuencia_INVENTARIO
+BEFORE INSERT ON INVENTARIO
+FOR EACH ROW
+BEGIN
+  :NEW.ID_INVENTARIO := SEQ_INVENTARIO.NEXTVAL;
+END;
+
+
+CREATE OR REPLACE PACKAGE paquete_inventario IS
+    TYPE inventarios_cursor IS REF CURSOR;
+    
     procedure INSERTAR_INVENTARIO(
-	id_inventario IN NUMBER,
-    id_modelo IN NUMBER,
-    precio_unidad IN NUMBER,
-    nombre_inv IN VARCHAR2,
-    stock IN NUMBER,
-    sucursal_disponible IN VARCHAR2,
-    disponible IN VARCHAR2
+        id_modelo IN inventario.id_modelo%type, 
+        nombre_inv IN inventario.nombre_inv%type, 
+        precio_unidad IN inventario.precio_unidad%type, 
+        stock IN inventario.stock%type, 
+        sucursal_disponible IN inventario.sucursal_disponible%type, 
+        disponible IN inventario.disponible%type, 
+        url_imagen IN inventario.url_imagen%type
     );
-    
+    PROCEDURE obtener_inventarios(
+    inventarios_cursor OUT SYS_REFCURSOR
+    );
     procedure EDITAR_INVENTARIO(
-	id_inventario IN NUMBER,
-    id_modelo IN NUMBER,
-    precio_unidad IN NUMBER,
-    nombre_inv IN VARCHAR2,
-    stock IN NUMBER,
-    sucursal_disponible IN VARCHAR2,
-    disponible IN VARCHAR2
+        id_inventario2 IN NUMBER,
+	    id_modelo2 IN inventario.id_modelo%type, 
+        nombre_inv2 IN inventario.nombre_inv%type, 
+        precio_unidad2 IN inventario.precio_unidad%type, 
+        stock2 IN inventario.stock%type, 
+        sucursal_disponible2 IN inventario.sucursal_disponible%type, 
+        disponible2 IN inventario.disponible%type, 
+        url_imagen2 IN inventario.url_imagen%type
     );
-
-    FUNCTION COMPARAR_NOMBRE_INV(
-        nombre_inventario IN VARCHAR2
-    ) RETURN SYS_REFCURSOR;
     
+    PROCEDURE BUSCAR_INVENTARIO_POR_ID(
+        p_id_inventario IN INVENTARIO.id_INVENTARIO%TYPE,
+        p_id_modelo OUT inventario.id_modelo%type, 
+        p_nombre_inv OUT inventario.nombre_inv%type, 
+        p_precio_unidad OUT inventario.precio_unidad%type, 
+        p_stock OUT inventario.stock%type, 
+        p_sucursal_disponible OUT inventario.sucursal_disponible%type, 
+        p_disponible OUT inventario.disponible%type, 
+        p_url_imagen OUT inventario.url_imagen%type
+    );
     
-end;
+END paquete_inventario;
 
-CREATE OR REPLACE PACKAGE BODY USERSERVICE.paquete_inventario IS
+CREATE OR REPLACE PACKAGE BODY paquete_inventario IS
+
 PROCEDURE INSERTAR_INVENTARIO(
-    id_inventario IN NUMBER,
-    id_modelo IN NUMBER,
-    precio_unidad IN NUMBER,
-    nombre_inv IN VARCHAR2,
-    stock IN NUMBER,
-    sucursal_disponible IN VARCHAR2,
-    disponible IN VARCHAR2
-)IS
-    BEGIN
-        INSERT INTO USERSERVICE.inventario (
-            id_inventario,
-            id_modelo,
-            precio_unidad,
-            nombre_inv,
-            stock,
-            sucursal_disponible,
-            disponible
-        ) VALUES (
-            id_inventario,
-            id_modelo,
-            precio_unidad,
-            nombre_inv,
-            stock,
-            sucursal_disponible,
-            disponible
-        );
-        
-    END INSERTAR_INVENTARIO;
+    id_modelo IN inventario.id_modelo%type, 
+    nombre_inv IN inventario.nombre_inv%type, 
+    precio_unidad IN inventario.precio_unidad%type, 
+    stock IN inventario.stock%type, 
+    sucursal_disponible IN inventario.sucursal_disponible%type, 
+    disponible IN inventario.disponible%type, 
+    url_imagen IN inventario.url_imagen%type
+) IS
+    url_imagen_modificado inventario.url_imagen%type; 
+BEGIN
+    url_imagen_modificado := REGEXP_REPLACE(url_imagen, 'C:\\fakepath\\', 'images\\');
+
     
-PROCEDURE EDITAR_INVENTARIO(
-        id_inventario IN NUMBER,
-        id_modelo IN NUMBER,
-        precio_unidad IN NUMBER,
-        nombre_inv IN VARCHAR2,
-        stock IN NUMBER,
-        sucursal_disponible IN VARCHAR2,
-        disponible IN VARCHAR2
-    )IS
-        BEGIN
-            UPDATE USERSERVICE.inventario SET 
-                id_modelo = id_modelo,
-                precio_unidad = precio_unidad,
-                nombre_inv = nombre_inv,
-                stock = stock,
-                sucursal_disponible = sucursal_disponible,
-                disponible = disponible
-            WHERE id_inventario = id_inventario;
-            
-            
-        END EDITAR_INVENTARIO;
-        
-    FUNCTION COMPARAR_NOMBRE_INV(
-        nombre_inventario IN VARCHAR2
-    ) RETURN SYS_REFCURSOR IS
-        cur SYS_REFCURSOR;
+    INSERT INTO INVENTARIO (
+        id_modelo,
+        nombre_inv,
+        precio_unidad,
+        stock,
+        sucursal_disponible,
+        disponible,
+        url_imagen
+    ) VALUES (
+        id_modelo,
+        nombre_inv,
+        precio_unidad,
+        stock,
+        sucursal_disponible,
+        disponible,
+        url_imagen_modificado 
+    );
+    COMMIT;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Capturar y mostrar el mensaje de error
+        DBMS_OUTPUT.PUT_LINE('Error al insertar el inventario: ' || SQLERRM);
+END INSERTAR_INVENTARIO;
+
+    
+    PROCEDURE EDITAR_INVENTARIO(
+    id_inventario2 IN NUMBER,
+    id_modelo2 IN inventario.id_modelo%type, 
+    nombre_inv2 IN inventario.nombre_inv%type, 
+    precio_unidad2 IN inventario.precio_unidad%type, 
+    stock2 IN inventario.stock%type, 
+    sucursal_disponible2 IN inventario.sucursal_disponible%type, 
+    disponible2 IN inventario.disponible%type, 
+    url_imagen2 IN inventario.url_imagen%type
+) IS
+BEGIN
+    UPDATE INVENTARIO SET 
+            id_modelo = id_modelo2,
+            nombre_inv = nombre_inv2,
+            precio_unidad = precio_unidad2,
+            stock = stock2,
+            sucursal_disponible = sucursal_disponible2,
+            disponible = disponible2,
+            url_imagen = url_imagen2
+    WHERE id_inventario = id_inventario2; 
+    
+    COMMIT;
+END EDITAR_INVENTARIO;
+
+    
+    --PROCEDIMIENTO BUSCAR USUARIO POR ID PARA LUEGO EDITAR
+    PROCEDURE BUSCAR_INVENTARIO_POR_ID(
+        p_id_inventario IN INVENTARIO.id_INVENTARIO%TYPE,
+        p_id_modelo OUT inventario.id_modelo%type, 
+        p_nombre_inv OUT inventario.nombre_inv%type, 
+        p_precio_unidad OUT inventario.precio_unidad%type, 
+        p_stock OUT inventario.stock%type, 
+        p_sucursal_disponible OUT inventario.sucursal_disponible%type, 
+        p_disponible OUT inventario.disponible%type, 
+        p_url_imagen OUT inventario.url_imagen%type
+    ) IS
     BEGIN
-        OPEN cur FOR
-            SELECT *
-            FROM inventario
-            WHERE REGEXP_LIKE(nombre_inv, nombre_inv);
-        
-        RETURN cur;
-    END COMPARAR_NOMBRE_INV;
+        SELECT
+            id_modelo,
+            nombre_inv,
+            precio_unidad,
+            stock,
+            sucursal_disponible,
+            disponible,
+            url_imagen
+        INTO 
+            p_id_modelo,
+            p_nombre_inv,
+            p_precio_unidad,
+            p_stock,
+            p_sucursal_disponible,
+            p_disponible,
+            p_url_imagen
+        FROM 
+            INVENTARIO
+        WHERE 
+            id_inventario = p_id_inventario;
+
+        -- Si no se encuentra ningÃºn usuario con el ID ingresado
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            DBMS_OUTPUT.PUT_LINE('No se encontrÃ³ ningÃºn usuario con el ID proporcionado.');
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al buscar el usuario: ' || SQLERRM);
+    END BUSCAR_INVENTARIO_POR_ID;
+    
+    PROCEDURE obtener_inventarios(
+    inventarios_cursor OUT SYS_REFCURSOR
+    )
+IS
+BEGIN
+    OPEN inventarios_cursor FOR
+        select i.id_inventario, m.nombre_modelo, i.nombre_inv, i.precio_unidad, i.stock, i.sucursal_disponible, i.disponible,i.url_imagen
+        from inventario i
+        inner join MODELO m on i.id_modelo = m.id_modelo;
+END obtener_inventarios;
 END paquete_inventario;
 
 --Paquete usuario

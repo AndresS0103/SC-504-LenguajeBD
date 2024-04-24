@@ -413,10 +413,10 @@ END EDITAR_USUARIO;
         WHERE 
             id_usuario = p_id_usuario;
 
-        -- Si no se encuentra ningún usuario con el ID ingresado
+        -- Si no se encuentra ningÃºn usuario con el ID ingresado
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE('No se encontró ningún usuario con el ID proporcionado.');
+            DBMS_OUTPUT.PUT_LINE('No se encontrÃ³ ningÃºn usuario con el ID proporcionado.');
         WHEN OTHERS THEN
             DBMS_OUTPUT.PUT_LINE('Error al buscar el usuario: ' || SQLERRM);
     END BUSCAR_USUARIO_POR_ID;
@@ -478,6 +478,165 @@ CREATE OR REPLACE PACKAGE BODY paquete_factuuras IS
     END ver_facturas;
 
 END paquete_factuuras;
+
+
+-- Paquete de marcas
+CREATE OR REPLACE PACKAGE paquete_marca IS
+    TYPE marcas_cursor IS REF CURSOR;
+
+    PROCEDURE insertar_marca(
+        nombre IN VARCHAR2,
+        nacionalidad IN VARCHAR2
+    );
+    
+    PROCEDURE editar_marca(
+        id_marca2 IN NUMBER,
+        nombre2 IN VARCHAR2,
+        nacionalidad2 IN VARCHAR2
+    );
+
+    PROCEDURE ver_marcas(
+    marcas OUT marcas_cursor
+    );
+END paquete_marca;
+/
+-- Paquete de Cuerpo
+CREATE OR REPLACE PACKAGE BODY paquete_marca IS
+
+    PROCEDURE insertar_marca(
+        nombre IN VARCHAR2,
+        nacionalidad IN VARCHAR2
+    ) IS
+    BEGIN
+        INSERT INTO MARCA (
+            nombre,
+            nacionalidad
+        ) VALUES (
+            nombre,
+            nacionalidad
+        );
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al insertar la marca:  ' || SQLERRM);
+    END insertar_marca;
+
+    PROCEDURE editar_marca(
+        id_marca2 IN NUMBER,
+        nombre2 IN VARCHAR2,
+        nacionalidad2 IN VARCHAR2
+    ) IS
+    BEGIN
+        UPDATE MARCA SET 
+            nombre = nombre2,
+            nacionalidad = nacionalidad2
+        WHERE id_marca = id_marca2; 
+        
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al editar la marca: ' || SQLERRM);
+    END editar_marca;
+
+    PROCEDURE ver_marcas(
+        marcas OUT marcas_cursor
+    ) IS
+    BEGIN
+        OPEN marcas FOR
+            SELECT * from MARCA;
+    END ver_marcas;
+
+END paquete_marca;
+/
+
+
+
+
+
+select * from modelo;
+--PAQUETE HEADER CON PROCES MODELO
+CREATE OR REPLACE PACKAGE paquete_modelo IS
+    TYPE modelo_cursor IS REF CURSOR;
+
+    PROCEDURE insertar_modelo(
+        id_marca IN NUMBER,
+        nombre_modelo IN VARCHAR2,
+        num_puertas IN NUMBER,
+        anio IN NUMBER
+    );
+    
+    PROCEDURE editar_modelo(
+        id_modelo2 IN NUMBER,
+        id_marca2 IN NUMBER,
+        nombre_modelo2 IN VARCHAR2,
+        num_puertas2 IN NUMBER,
+        anio2 IN NUMBER
+    );
+    
+    PROCEDURE ver_modelo(
+        modelo OUT modelo_cursor
+    );
+    
+END paquete_modelo;
+/
+CREATE OR REPLACE PACKAGE BODY paquete_modelo IS
+    --PROCEDIMIENTO INSERTAR MODELO
+    PROCEDURE insertar_modelo(
+        id_marca IN NUMBER,
+        nombre_modelo IN VARCHAR2,
+        num_puertas IN NUMBER,
+        anio IN NUMBER
+    )IS
+    BEGIN
+        INSERT INTO MODELO (
+            id_marca,
+            nombre_modelo,
+            num_puertas,
+            anio
+        ) VALUES (
+            id_marca,
+            nombre_modelo,
+            num_puertas,
+            anio
+        );
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error al insertar el modelo: ' || SQLERRM);
+    END insertar_modelo;
+    
+    --PROCEDIMIENTO EDITAR MODELO
+    PROCEDURE editar_modelo(
+            id_modelo2 IN NUMBER,
+            id_marca2 IN NUMBER,
+            nombre_modelo2 IN VARCHAR2,
+            num_puertas2 IN NUMBER,
+            anio2 IN NUMBER
+        )IS
+    BEGIN
+        UPDATE MODELO SET 
+            id_marca = id_marca2,
+            nombre_modelo = nombre_modelo2,
+            num_puertas = num_puertas2,
+            anio = anio2
+        WHERE id_modelo = id_modelo2; 
+    
+    COMMIT;
+    END editar_modelo;
+    PROCEDURE ver_modelo(
+        modelo OUT modelo_cursor
+    ) IS
+    BEGIN
+        OPEN modelo FOR
+            SELECT * from MODELO;
+    END ver_modelo;
+    
+    
+END paquete_modelo;
+/
+
 
 --Auditoria
 ALTER TABLE FINANZAS
@@ -821,6 +980,30 @@ BEGIN
   :NEW.id_usuario := SEQ_USUARIO_ID.NEXTVAL;
 END;
 
+-- SEQUENCIA Y TRIGGER
+--Secuencia para autoincrementar id_marca
+CREATE SEQUENCE SEQ_MARCA_ID
+    START WITH 1
+    INCREMENT BY 1;
+    
+CREATE OR REPLACE TRIGGER TRG_GENERAR_SEQ_MARCA_ID
+BEFORE INSERT ON MARCA
+FOR EACH ROW
+BEGIN
+    :NEW.id_marca := SEQ_MARCA_ID.NEXTVAL;
+END;
+
+--Secuencia para autoincrementar id_modelo
+CREATE SEQUENCE SEQ_MODELO_ID
+    START WITH 1
+    INCREMENT BY 1;
+    
+CREATE OR REPLACE TRIGGER TRG_GENERAR_SEQ_MODELO_ID
+BEFORE INSERT ON MODELO
+FOR EACH ROW
+BEGIN
+    :NEW.id_modelo := SEQ_MODELO_ID.NEXTVAL;
+END;
 
 --procedimiento para el inicio de sesion
 CREATE OR REPLACE PROCEDURE iniciar_sesion(

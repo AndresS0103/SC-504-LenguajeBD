@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Starter</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="./assets/css/container.css">
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <!-- Navbar content here -->
+    <!-- Sidebar -->
+    <!-- Sidebar content here -->
+    <div class="content-wrapper">
+      <div class="container">
+        <div class="content-wrapper">
+          <div class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <h3>Administracion de Modelos</h3><br>
+                <div class="col-sm-6">
+                  <br><br>
+                  <button id="btn-create" class="btn btn-primary">Crear Modelo</button>
+                  <br><br><br>
+                  <button id="btn-view" class="btn btn-primary">Ver Modelos</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="form-wrapper" class="form-wrapper" style="display: none;">
+            <h2>Crear Modelo</h2>
+            <form id="add-modelo-form" class="mt-4">
+              <div class="form-group">
+                <label for="id_marca">ID Marca</label>
+                <input type="text" class="form-control" id="id_marca" name="id_marca" placeholder="ID Marca" required>
+              </div>
+              <div class="form-group">
+                <label for="nombre_modelo">Nombre Modelo</label>
+                <input type="text" class="form-control" id="nombre_modelo" name="nombre_modelo" placeholder="Nombre Modelo" required>
+              </div>
+              <div class="form-group">
+                <label for="num_puertas">Número de Puertas</label>
+                <input type="number" class="form-control" id="num_puertas" name="num_puertas" placeholder="Número de Puertas" required>
+              </div>
+              <div class="form-group">
+                <label for="anio">Año</label>
+                <input type="number" class="form-control" id="anio" name="anio" placeholder="Año" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Agregar Modelo</button>
+              <br><br>
+            </form>
+            <br><br>
+          </div>
+          <div id="table-wrapper">
+            <h2>Lista de Modelos</h2>
+            <div class="table-wrapper">
+              <table id="modelo-table" class="table">
+                <thead>
+                  <tr>
+                    <th>ID Modelo</th>
+                    <th>Nombre Modelo</th>
+                    <th>Número de Puertas</th>
+                    <th>Año</th>
+                  </tr>
+                </thead>
+                <tbody id="modelo-body">
+                  <br><br>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          $(document).ready(function () {
+            $('#btn-create').click(function () {
+              $('#form-wrapper').show();
+              $('#table-wrapper').hide();
+            });
+
+            $('#btn-view').click(function () {
+              $('#table-wrapper').show();
+              $('#form-wrapper').hide();
+            });
+
+            $('#add-modelo-form').submit(function (event) {
+              event.preventDefault();
+              const id_marca = $('#id_marca').val();
+              const nombre_modelo = $('#nombre_modelo').val();
+              const num_puertas = $('#num_puertas').val();
+              const anio = $('#anio').val();
+              $.ajax({
+                url: '/modelos',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id_marca, nombre_modelo, num_puertas, anio }),
+                success: function (response) {
+                  alert(response.message);
+                  updateModelosTable();
+                },
+                error: function (error) {
+                  console.error('Error al agregar modelo:', error);
+                  alert('Error al agregar modelo. Consulta la consola para más detalles.');
+                }
+              });
+            });
+
+            function updateModelosTable() {
+              $.get('/verModelos', function (modelos) {
+                const modeloBody = $('#modelo-body');
+                modeloBody.empty();
+                modelos.forEach(modelo => {
+                  modeloBody.append(`
+                    <tr>
+                      <td>${modelo[0]}</td>
+                      <td>${modelo[1]}</td>
+                      <td>${modelo[2]}</td>
+                      <td>${modelo[3]}</td>
+                    </tr>
+                  `);
+                });
+              });
+            }
+
+            updateModelosTable();
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="dist/js/adminlte.min.js"></script>
+</body>
+</html>

@@ -5,6 +5,8 @@ const oracledb = require('oracledb');
 const app = express();
 const { obtenerUsuarios } = require('./conexion');
 const { obtenerFacturas } = require('./conexion');
+const { obtenerMarcas } = require('./conexion');
+const { obtenerModelos } = require('./conexion');
 
 
 /*
@@ -189,6 +191,78 @@ app.get('/verFacturas', async (req, res) => {
         res.json(facturas);
     } catch (error) {
         console.error('Error al obtener las facturas:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+// Crear marcas
+app.post('/marcas', async (req, res) => {
+    const { nombre, nacionalidad } = req.body;
+
+    try {
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_marca.insertar_marca(:nombre, :nacionalidad); END;`,
+            {
+                nombre: nombre,
+                nacionalidad: nacionalidad
+            },
+            { autoCommit: true }
+        );
+
+        connection.close();
+        res.status(200).json({ message: 'Marca agregada exitosamente' });
+    } catch (error) {
+        console.error('Error al insertar marca:', error);
+        res.status(500).json({ error: 'Error interno al insertar marca' });
+    }
+});
+
+// Ver marcas
+app.get('/verMarcas', async (req, res) => {
+    try {
+        const marcas = await obtenerMarcas();
+        res.json(marcas);
+    } catch (error) {
+        console.error('Error al obtener las marcas:', error);
+        res.status(500).send('Error interno del servidor');
+    }
+});
+
+// Crear modelo
+app.post('/modelos', async (req, res) => {
+    const { id_marca, nombre_modelo, num_puertas, anio } = req.body;
+
+    try {
+        const connection = await oracledb.getConnection(dbConfig);
+        const result = await connection.execute(
+            `BEGIN paquete_modelo.insertar_modelo(:id_marca, :nombre_modelo, :num_puertas, :anio); END;`,
+            {
+                id_marca: id_marca,
+                nombre_modelo: nombre_modelo,
+                num_puertas: num_puertas,
+                anio: anio
+            },
+            { autoCommit: true }
+        );
+
+        connection.close();
+        res.status(200).json({ message: 'Modelo agregado exitosamente' });
+    } catch (error) {
+        console.error('Error al agregar modelo:', error);
+        res.status(500).json({ error: 'Error interno al agregar modelo' });
+    }
+});
+
+
+
+// Ver modelos
+app.get('/verModelos', async (req, res) => {
+    try {
+        const modelos = await obtenerModelos();
+        res.json(modelos);
+    } catch (error) {
+        console.error('Error al obtener los modelos:', error);
         res.status(500).send('Error interno del servidor');
     }
 });

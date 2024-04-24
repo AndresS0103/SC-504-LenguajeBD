@@ -161,5 +161,70 @@ async function agregarFactura(id_usuario, fecha_pago, total_pago, detalle) {
             }
         }
     }
+ // ver marcas
+    async function obtenerMarcas() {
+        let connection;
+        try {
+            connection = await conectarBaseDatos();
+            const result = await connection.execute(
+                `BEGIN paquete_marca.ver_marcas(:marcas_cursor); END;`,
+                { marcas_cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR } }
+            );
+    
+            const marcasCursor = result.outBinds.marcas_cursor;
+            let marcas = [];
+            let row;
+            while ((row = await marcasCursor.getRow())) {
+                marcas.push(row);
+            }
+            await marcasCursor.close();
+            return marcas;
+        } catch (error) {
+            console.error('Error al obtener las marcas:', error);
+            throw error;
+        } finally {
+            if (connection) {
+                try {
+                    await connection.close();
+                } catch (err) {
+                    console.error('Error al cerrar la conexión:', err);
+                }
+            }
+        }
+    }
 
-    module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas };
+// Ver modelos
+
+async function obtenerModelos() {
+    let connection;
+    try {
+        connection = await conectarBaseDatos();
+        const result = await connection.execute(
+            `BEGIN paquete_modelo.ver_modelo(:modelo_cursor); END;`,
+            { modelo_cursor: { dir: oracledb.BIND_OUT, type: oracledb.CURSOR } }
+        );
+
+        const modeloCursor = result.outBinds.modelo_cursor;
+        let modelos = [];
+        let row;
+        while ((row = await modeloCursor.getRow())) {
+            modelos.push(row);
+        }
+        await modeloCursor.close();
+        return modelos;
+    } catch (error) {
+        console.error('Error al obtener los modelos:', error);
+        throw error;
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+            } catch (err) {
+                console.error('Error al cerrar la conexión:', err);
+            }
+        }
+    }
+}
+
+
+    module.exports = { conectarBaseDatos, obtenerUsuarios, obtenerFacturas, obtenerMarcas, obtenerModelos };
